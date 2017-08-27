@@ -34,7 +34,8 @@ void EvtVVP_mm::init(){
 }
 
 void EvtVVP_mm::initProbMax(){
-  setProbMax(20);
+  // mu mu
+  setProbMax(65); // tested on 1e6 events
 }
 
 void EvtVVP_mm::decay( EvtParticle *root ){
@@ -54,11 +55,11 @@ void EvtVVP_mm::decay( EvtParticle *root ){
       EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
       for(int iMplus=0; iMplus<2; ++iMplus) {
         iPols[2]=iMplus;
-        EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus);
+        EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus).conj();
         for(int iMminus=0; iMminus<2; ++iMminus) {
           iPols[3]=iMminus;
-          EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus);
-          EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus).conj();
+          EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus).conj();
+          EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
           // amp = e_{mu nu alpha beta} epsChi^mu epsPsi^nu epsGamma^alpha k^beta/k^2
           EvtComplex amp = k*dual(EvtGenFunctions::directProd(epsChi,epsPsi)).cont1(epsGamma);
           amp = amp/(k*k);
