@@ -32,7 +32,7 @@ void EvtVVP_mm::init(){
 }
 
 void EvtVVP_mm::initProbMax(){
-  setProbMax(10);
+  setProbMax(20);
 }
 
 void EvtVVP_mm::decay( EvtParticle *root ){
@@ -66,4 +66,3 @@ void EvtVVP_mm::decay( EvtParticle *root ){
     };
   };
 }
-
