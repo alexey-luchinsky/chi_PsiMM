@@ -54,6 +54,7 @@ void init_evtgen()
 
 
 int main(int argc, char** argv) {
+// ======== READ params ==========================
   cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [decay_file=my_decay.dec]"<<endl;
   if(argc<2) {
     cout<<"Wrong number of arguments!"<<endl;
@@ -72,6 +73,8 @@ int main(int argc, char** argv) {
   else decay_file=(char*)"my_decay.dec";
   cout<<" decay_file = "<<decay_file<<endl;
 
+// ======== INIT ==========================
+  init_evtgen();
   EvtParticle* parent(0);
 
 
@@ -82,7 +85,8 @@ int main(int argc, char** argv) {
   string outName=string("root_")+string(argv[1])+string(".root");
   TFile file(outName.c_str(),"RECREATE");
   TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi");
-  // Loop to create nEvents, starting from an Upsilon(4S)
+
+  // ======== MAIN LOOP ==========================
   int i;
   for (i = 0; i < nEvents; i++) {
     if(i%(nEvents/10)==0) {
