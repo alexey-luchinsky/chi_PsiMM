@@ -1,0 +1,12 @@
+Decay chi_c0
+1 J/psi mu+ mu- SVP_mm;
+Enddecay
+
+Decay chi_c1
+1 J/psi mu+ mu- VVP_mm;
+Enddecay
+
+Decay chi_c2
+1 J/psi mu+ mu- TVP_mm;
+Enddecay
+End
