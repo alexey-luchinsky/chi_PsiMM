@@ -1,13 +1,5 @@
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-using namespace std;
-
-#include "TFile.h"
-#include "TNtuple.h"
-#include "TH1F.h"
-
 #include "EvtGen/EvtGen.hh"
+
 #include "EvtGenBase/EvtParticle.hh"
 #include "EvtGenBase/EvtParticleFactory.hh"
 #include "EvtGenBase/EvtPatches.hh"
@@ -25,8 +17,12 @@ using namespace std;
 #include "EvtGenModels/EvtVVP_mm.hh"
 #include "EvtGenModels/EvtTVP_mm.hh"
 
-EvtGen *myGenerator;
+#include "TFile.h"
+#include "TNtuple.h"
 
+using namespace std;
+
+EvtGen *myGenerator;
 
 void init_evtgen()
 {
@@ -57,45 +53,28 @@ void init_evtgen()
 }
 
 
-
-void write_histogram_to_file(TH1F &histogram, string file_name) {
-    const char *__file_name__ = file_name.c_str();
-    remove(__file_name__);
-    ofstream file;
-
-    file.open(__file_name__);
-    for (int i = 1; i <= histogram.GetNbinsX(); i++)
-        file << setiosflags(ios::scientific) << histogram.GetBinCenter(i) <<
-        " " << setiosflags(ios::scientific) << histogram.GetBinContent(i) / histogram.GetBinWidth(i) <<
-        " " << setiosflags(ios::scientific) << histogram.GetBinError(i) / histogram.GetBinWidth(i) << endl;
-
-    file.close();
-}
-
-int main(int argc, char const *argv[])
-{
+int main(int argc, char** argv) {
   cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [decay_file=my_decay.dec]"<<endl;
-   if(argc<2) {
-     cout<<"Wrong number of arguments!"<<endl;
-     return 1;
-   };
-   cout<<" Decaying particle "<<argv[1]<<endl;
+  if(argc<2) {
+    cout<<"Wrong number of arguments!"<<endl;
+    return 1;
+  };
+  cout<<" Decaying particle "<<argv[1]<<endl;
 
-   int nEvents(1e6);
-   if(argc>2) nEvents=(int)atof(argv[2]);
-   cout<<" nEvents="<<nEvents<<endl;
+  int nEvents(1e6);
+  if(argc>2) nEvents=(int)atof(argv[2]);
+  cout<<" nEvents="<<nEvents<<endl;
 
 
 
-   char *decay_file;
-//   if(argc>3) decay_file=argv[3];
-//   else decay_file=(char*)"my_decay.dec";
-  decay_file=(char*)"my_decay.dec";
-   cout<<" decay_file = "<<decay_file<<endl;
-
-  init_evtgen();
+  char *decay_file;
+  if(argc>3) decay_file=argv[3];
+  else decay_file=(char*)"my_decay.dec";
+  cout<<" decay_file = "<<decay_file<<endl;
 
   EvtParticle* parent(0);
+
+
 
   static EvtId CHI = EvtPDL::getId(std::string(argv[1]));
 
@@ -143,7 +122,6 @@ int main(int argc, char const *argv[])
 
   }
 
-//  delete eng;
   tup.Write();
   file.Save();
 
