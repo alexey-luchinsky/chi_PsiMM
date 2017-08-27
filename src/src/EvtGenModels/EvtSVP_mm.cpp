@@ -90,5 +90,6 @@ void EvtSVP_mm::init(){
 }
 
 void EvtSVP_mm::initProbMax() {
-    setProbMax(150);
+    // mu mu
+    setProbMax(550); // tested on 1e6 events
 }
