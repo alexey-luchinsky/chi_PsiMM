@@ -17,7 +17,7 @@
 //	AVL	Jul 6, 2012	modle created
 //
 //------------------------------------------------------------------------
-// 
+//
 #include "EvtGenBase/EvtPatches.hh"
 #include <stdlib.h>
 #include "EvtGenBase/EvtParticle.hh"
@@ -43,7 +43,7 @@ EvtSVP_mm::~EvtSVP_mm() {
 }
 
 std::string EvtSVP_mm::getName(){
-  return "SVP_mm";     
+  return "SVP_mm";
 }
 
 
@@ -59,15 +59,19 @@ void EvtSVP_mm::decay( EvtParticle *root ){
     k1 = root->getDaug(1)->getP4(),        // mu+ momentum
     k2 = root->getDaug(2)->getP4(),        // mu- momentum
     k=k1+k2;                               // photon momentum
-  for(int iPsi=0; iPsi<4; ++iPsi) {
+  for(int iPsi=0; iPsi<3; ++iPsi) {
     EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
     for(int iMplus=0; iMplus<2; ++iMplus) {
-      EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus);
+      EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus).conj();
       for(int iMminus=0; iMminus<2; ++iMminus) {
-        EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus);
+        EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus).conj();
         EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
         EvtComplex amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/(k*p);
         amp = amp/(k*k);
+        if(!(abs2(amp)>-1))  {
+          cout<<"error! amp="<<amp<<endl;
+          return;
+        };
         vertex(iPsi, iMplus, iMminus, amp);
       };
     };

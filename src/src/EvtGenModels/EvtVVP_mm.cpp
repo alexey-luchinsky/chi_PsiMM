@@ -12,6 +12,8 @@
 #include "EvtGenBase/EvtDiracSpinor.hh"
 #include "EvtGenBase/EvtTensor4C.hh"
 
+using namespace std;
+
 EvtVVP_mm::~EvtVVP_mm() {}
 
 std::string EvtVVP_mm::getName(){
@@ -47,7 +49,7 @@ void EvtVVP_mm::decay( EvtParticle *root ){
   for(int iChi= 0; iChi<3; iChi++) {
     iPols[0]=iChi;
     EvtVector4C epsChi = root->epsParent(iChi);
-    for(int iPsi = 0; iPsi < 4; iPsi++) {
+    for(int iPsi = 0; iPsi < 3; iPsi++) {
       iPols[1]=iPsi;
       EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
       for(int iMplus=0; iMplus<2; ++iMplus) {
@@ -60,6 +62,10 @@ void EvtVVP_mm::decay( EvtParticle *root ){
           // amp = e_{mu nu alpha beta} epsChi^mu epsPsi^nu epsGamma^alpha k^beta/k^2
           EvtComplex amp = k*dual(EvtGenFunctions::directProd(epsChi,epsPsi)).cont1(epsGamma);
           amp = amp/(k*k);
+          if(!(abs2(amp)>-1))  {
+            cout<<"error! amp="<<amp<<endl;
+            return;
+          };
           vertex(iPols, amp);
         };
       };

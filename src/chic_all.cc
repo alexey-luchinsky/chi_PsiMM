@@ -46,32 +46,32 @@ int main(int argc, char** argv) {
   cout<<" decay_file = "<<decay_file<<endl;
 
 // ======== INIT ==========================
-EvtParticle* parent(0);
-EvtRandomEngine* eng = 0;
-#ifdef EVTGEN_CPP11
-// Use the Mersenne-Twister generator (C++11 only)
-eng = new EvtMTRandomEngine();
-#else
-eng = new EvtSimpleRandomEngine();
-#endif
+  EvtParticle* parent(0);
+  EvtRandomEngine* eng = 0;
+  #ifdef EVTGEN_CPP11
+  // Use the Mersenne-Twister generator (C++11 only)
+  eng = new EvtMTRandomEngine();
+  #else
+  eng = new EvtSimpleRandomEngine();
+  #endif
 
-EvtRandom::setRandomEngine(eng);
+  EvtRandom::setRandomEngine(eng);
 
 
-EvtAbsRadCorr* radCorrEngine = 0;
+  EvtAbsRadCorr* radCorrEngine = 0;
 
-std::list<EvtDecayBase*> extraModels;
-EvtModel &modelist=EvtModel::instance();
-modelist.registerModel(new EvtSVP_mm);
-modelist.registerModel(new EvtVVP_mm);
-modelist.registerModel(new EvtTVP_mm);
+  std::list<EvtDecayBase*> extraModels;
+  EvtModel &modelist=EvtModel::instance();
+  modelist.registerModel(new EvtSVP_mm);
+  modelist.registerModel(new EvtVVP_mm);
+  modelist.registerModel(new EvtTVP_mm);
 
-EvtGen *myGenerator=new EvtGen("../src/my.dec" ,"../src/evt.pdl", eng,
+  EvtGen *myGenerator=new EvtGen("../src/my.dec" ,"../src/evt.pdl", eng,
                    radCorrEngine, &extraModels);
 
 
 
-  static EvtId CHI = EvtPDL::getId(std::string(argv[1]));
+   static EvtId CHI = EvtPDL::getId(std::string(argv[1]));
 
 
   string outName=string("root_")+string(argv[1])+string(".root");
