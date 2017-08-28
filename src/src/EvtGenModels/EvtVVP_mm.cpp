@@ -33,10 +33,6 @@ void EvtVVP_mm::init(){
   checkSpinDaughter(2,EvtSpinType::DIRAC);
 }
 
-void EvtVVP_mm::initProbMax(){
-  // mu mu
-  setProbMax(65); // tested on 1e6 events
-}
 
 void EvtVVP_mm::decay( EvtParticle *root ){
   root ->initializePhaseSpace(getNDaug(),getDaugs());
@@ -63,9 +59,24 @@ void EvtVVP_mm::decay( EvtParticle *root ){
           // amp = e_{mu nu alpha beta} epsChi^mu epsPsi^nu epsGamma^alpha k^beta/k^2
           EvtComplex amp = k*dual(EvtGenFunctions::directProd(epsChi,epsPsi)).cont1(epsGamma);
           amp = amp/(k*k);
+          if(k.mass2()<0.005) amp=0;
           vertex(iPols, amp);
         };
       };
     };
   };
+}
+
+void EvtVVP_mm::initProbMax(){
+  if(getDaug(1).getId() == EvtPDL::getId("mu+").getId()) {
+    cout<<"mu+"<<endl;
+    setProbMax(65); // tested on 1e6 events
+  }
+  if(getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
+    cout<<"e+"<<endl;
+    setProbMax(100); // tested on 1e6 events
+  }
+  else {
+    cout<<" EvtID "<<getDaug(1)<<" not realized yet"<<endl;
+  }
 }

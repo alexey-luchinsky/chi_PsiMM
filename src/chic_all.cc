@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 // ======== READ params ==========================
-  cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [decay_file=my_decay.dec]"<<endl;
+  cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [decay_file=my_decay.dec] [postfix=]"<<endl;
   if(argc<2) {
     cout<<"Wrong number of arguments!"<<endl;
     return 1;
@@ -42,8 +42,13 @@ int main(int argc, char** argv) {
 
   char *decay_file;
   if(argc>3) decay_file=argv[3];
-  else decay_file=(char*)"my_decay.dec";
+  else decay_file=(char*)"../src/my.dec";
   cout<<" decay_file = "<<decay_file<<endl;
+
+  char *postfix;
+  if(argc>4) postfix=argv[4];
+  else postfix=(char*)"";
+  cout<<"postfix="<<postfix<<endl;
 
 // ======== INIT ==========================
   EvtParticle* parent(0);
@@ -66,7 +71,7 @@ int main(int argc, char** argv) {
   modelist.registerModel(new EvtVVP_mm);
   modelist.registerModel(new EvtTVP_mm);
 
-  EvtGen *myGenerator=new EvtGen("../src/my.dec" ,"../src/evt.pdl", eng,
+  EvtGen *myGenerator=new EvtGen(decay_file ,"../src/evt.pdl", eng,
                    radCorrEngine, &extraModels);
 
 
@@ -74,7 +79,7 @@ int main(int argc, char** argv) {
    static EvtId CHI = EvtPDL::getId(std::string(argv[1]));
 
 
-  string outName=string("root_")+string(argv[1])+string(".root");
+  string outName=string("root_")+string(argv[1])+postfix+string(".root");
   TFile file(outName.c_str(),"RECREATE");
   TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi");
 

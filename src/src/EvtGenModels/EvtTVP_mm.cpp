@@ -76,11 +76,7 @@ void EvtTVP_mm::decay( EvtParticle *root ){
           EvtVector4C vvv = (p*k)*eee - (k*eee)*p;
           EvtComplex amp = vvv*epsGamma;
           amp = amp/(k*k);
-          /*          if(!(abs2(amp)>-1))  {
-            cout<<"error!"<<endl;
-            return;
-          };
-          */
+          if(k.mass2()<0.005) amp=0;
           vertex(iPols, amp);
         };
       };
@@ -98,6 +94,15 @@ void EvtTVP_mm::init(){
 }
 
 void EvtTVP_mm::initProbMax() {
-  // mu mu
-  setProbMax(520);  // tested on 1e6 events
+  if(getDaug(1).getId() == EvtPDL::getId("mu+").getId()) {
+    cout<<"mu+"<<endl;
+    setProbMax(520);  // tested on 1e6 events
+  }
+  if(getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
+    cout<<"e+"<<endl;
+    setProbMax(700); // tested on 1e6 events
+  }
+  else {
+    cout<<" EvtID "<<getDaug(1)<<" not realized yet"<<endl;
+  }
 }

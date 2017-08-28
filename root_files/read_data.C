@@ -39,6 +39,7 @@ void saveData(int id, string postfix) {
     tup->Project("hMchi0","Mchi",query.c_str()); write_histogram_to_file(*hMchi0,("hM_"+name+".hst").c_str());
     tup->Project("hQ20","q2",query.c_str()); write_histogram_to_file(*hQ20,("hQ2_"+name+".hst").c_str());
     tup->Project("hCos1","cosThEE",query.c_str()); write_histogram_to_file(*hCos1,("hCos_"+name+".hst").c_str());
+    tup->Project("hm2PsiK1","m2PsiK1",query.c_str()); write_histogram_to_file(*hm2PsiK1,("hm2PsiK1_"+name+".hst").c_str());
   }
   else {
     cout<<" No events for id="<<id<<endl;
