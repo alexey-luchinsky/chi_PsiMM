@@ -68,7 +68,7 @@ void EvtSVP_mm::decay( EvtParticle *root ){
         EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
         EvtComplex amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/(k*p);
         amp = amp/(k*k);
-        if(k.mass2()<0.005) amp=0;
+        if(k.mass2()<0.0005) amp=0;
         vertex(iPsi, iMplus, iMminus, amp);
       };
     };
@@ -88,12 +88,10 @@ void EvtSVP_mm::init(){
 
 void EvtSVP_mm::initProbMax() {
     if(getDaug(1).getId() == EvtPDL::getId("mu+").getId()) {
-      cout<<"mu+"<<endl;
       setProbMax(550); // tested on 1e6 events
     }
     if(getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
-      cout<<"e+"<<endl;
-      setProbMax(1e3); // tested on 1e6 events
+      setProbMax(8e3); // tested on 1e6 events
     }
     else {
       cout<<" EvtID "<<getDaug(1)<<" not realized yet"<<endl;

@@ -63,7 +63,7 @@ void EvtTVP_mm::decay( EvtParticle *root ){
       EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
       for(int iMplus=0; iMplus<2; ++iMplus) {
         iPols[2]=iMplus;
-        EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus);
+        EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus).conj();
         for(int iMminus=0; iMminus<2; ++iMminus) {
           iPols[3]=iMminus;
           EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus);
@@ -76,7 +76,7 @@ void EvtTVP_mm::decay( EvtParticle *root ){
           EvtVector4C vvv = (p*k)*eee - (k*eee)*p;
           EvtComplex amp = vvv*epsGamma;
           amp = amp/(k*k);
-          if(k.mass2()<0.005) amp=0;
+          if(k.mass2()<0.0005) amp=0;
           vertex(iPols, amp);
         };
       };
@@ -100,7 +100,7 @@ void EvtTVP_mm::initProbMax() {
   }
   if(getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
     cout<<"e+"<<endl;
-    setProbMax(700); // tested on 1e6 events
+    setProbMax(2e6); // tested on 1e6 events
   }
   else {
     cout<<" EvtID "<<getDaug(1)<<" not realized yet"<<endl;
