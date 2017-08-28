@@ -62,16 +62,12 @@ void EvtSVP_mm::decay( EvtParticle *root ){
   for(int iPsi=0; iPsi<3; ++iPsi) {
     EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
     for(int iMplus=0; iMplus<2; ++iMplus) {
-      EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus).conj();
+      EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus);
       for(int iMminus=0; iMminus<2; ++iMminus) {
-        EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus).conj();
+        EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus);
         EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
         EvtComplex amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/(k*p);
         amp = amp/(k*k);
-        if(!(abs2(amp)>-1))  {
-          cout<<"error! amp="<<amp<<endl;
-          return;
-        };
         vertex(iPsi, iMplus, iMminus, amp);
       };
     };

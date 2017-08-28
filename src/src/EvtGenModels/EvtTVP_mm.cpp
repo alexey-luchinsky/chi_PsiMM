@@ -63,10 +63,10 @@ void EvtTVP_mm::decay( EvtParticle *root ){
       EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
       for(int iMplus=0; iMplus<2; ++iMplus) {
         iPols[2]=iMplus;
-        EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus).conj();
+        EvtDiracSpinor spMplus=root->getDaug(1)->spParent(iMplus);
         for(int iMminus=0; iMminus<2; ++iMminus) {
           iPols[3]=iMminus;
-          EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus).conj();
+          EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus);
           EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
 
           // [Baranov, (11)
@@ -75,26 +75,18 @@ void EvtTVP_mm::decay( EvtParticle *root ){
           EvtVector4C eee = epsChi.cont1(epsPsi);
           EvtVector4C vvv = (p*k)*eee - (k*eee)*p;
           EvtComplex amp = vvv*epsGamma;
-          EvtComplex ampK = amp/(k*k);
-          if(!(abs2(ampK)>-1))  {
-            cout<<" ERROR "<<endl;
-            cout<<" p="<<p<<" "<<p.mass()<<endl;
-            cout<<" k1="<<k1<<" "<<k1.mass()<<endl;
-            cout<<" k2="<<k2<<" "<<k2.mass()<<endl;
-            cout<<" eee="<<eee<<endl;
-            cout<<" iChi="<<iChi<<" epsChi="<<epsChi<<endl;
-            cout<<" iPsi="<<iPsi<<" epsPsi="<<epsPsi<<endl;
-            cout<<"==============="<<endl;
+          amp = amp/(k*k);
+          /*          if(!(abs2(amp)>-1))  {
+            cout<<"error!"<<endl;
             return;
           };
-
-          vertex(iPols, ampK);
+          */
+          vertex(iPols, amp);
         };
       };
     };
   };
 }
-
 
 void EvtTVP_mm::init(){
   checkNArg(0);
