@@ -32,7 +32,12 @@ include_directories(/Users/luchinsky/Work/EvtGen/external/HepMC/include/)
 
 # adding sources for EvtGen
 include_directories(src/)
-file(GLOB_RECURSE evtgen_sources src/*.cc src/*.for src/src/*)
+file(GLOB_RECURSE evtgen_sources src/chic_all.cc src/*.for src/src/*)
 add_executable(chiC_all.exe ${evtgen_sources})
 target_link_libraries(chiC_all.exe ${ROOT_LIBRARIES} ${EVTGEN_LIBRARY_DIR}/archive/libEvtGen.a)
 target_link_libraries(chiC_all.exe /Users/luchinsky/Work/EvtGen/external/HepMC/lib/libHepMC.a)
+
+# adding sources for read_data
+add_executable(read_data.exe src/read_data.cc)
+target_link_libraries(read_data.exe ${ROOT_LIBRARIES} ${EVTGEN_LIBRARY_DIR}/archive/libEvtGen.a)
+target_link_libraries(read_data.exe /Users/luchinsky/Work/EvtGen/external/HepMC/lib/libHepMC.a)

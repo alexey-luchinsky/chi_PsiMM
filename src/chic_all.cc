@@ -19,10 +19,13 @@
 
 #include "TFile.h"
 #include "TNtuple.h"
+#include "TLorentzVector.h"
 
 using namespace std;
 
-
+void setLorentzVector(TLorentzVector *out, EvtVector4R in) {
+  out->SetXYZT(in.get(1), in.get(2), in.get(3), in.get(0));
+}
 
 
 int main(int argc, char** argv) {
@@ -82,6 +85,15 @@ int main(int argc, char** argv) {
   string outName=string("root_")+string(argv[1])+postfix+string(".root");
   TFile file(outName.c_str(),"RECREATE");
   TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi:m2K1KK1");
+  TTree *moms=new TTree("moms","moms");
+  EvtVector4R pPsi,k1,k2,kk1,kk2;
+  TLorentzVector *_pPsi=new TLorentzVector;  moms->Branch("pPsi","TLorentzVector",&_pPsi);
+  TLorentzVector *_k1=new TLorentzVector;  moms->Branch("k1","TLorentzVector",&_k1);
+  TLorentzVector *_k2=new TLorentzVector;  moms->Branch("k2","TLorentzVector",&_k2);
+  TLorentzVector *_kk1=new TLorentzVector;  moms->Branch("kk1","TLorentzVector",&_kk1);
+  TLorentzVector *_kk2=new TLorentzVector;  moms->Branch("kk2","TLorentzVector",&_kk2);
+  double Q2;
+  moms->Branch("q2",&Q2);
 
   // ======== MAIN LOOP ==========================
   int i;
@@ -98,19 +110,20 @@ int main(int argc, char** argv) {
     myGenerator->generateDecay(parent);
     // save the results
     EvtParticle *psi=parent->getDaug(0);
-    EvtVector4R pPsi = psi->getP4Lab();
-    EvtVector4R k1=parent->getDaug(1)->getP4Lab();
-    EvtVector4R k2=parent->getDaug(2)->getP4Lab();
+    pPsi = psi->getP4Lab(); setLorentzVector(_pPsi,pPsi);
+    k1=parent->getDaug(1)->getP4Lab(); setLorentzVector(_k1,k1);
+    k2=parent->getDaug(2)->getP4Lab(); setLorentzVector(_k2,k2);
     EvtVector4R k = k1+k2;
-    EvtVector4R kk1=psi->getDaug(0)->getP4Lab();
-    EvtVector4R kk2=psi->getDaug(1)->getP4Lab();
+    kk1=psi->getDaug(0)->getP4Lab(); setLorentzVector(_kk1,kk1);
+    kk2=psi->getDaug(1)->getP4Lab(); setLorentzVector(_kk2,kk2);
 
     EvtVector4R Ptot=pPsi+k1+k2;
-    double Q2=k*k;
+    Q2=k*k;
     double m2PsiK1 = (pPsi+k1)*(pPsi+k1);
     double m2PsiK2 = (pPsi+k2)*(pPsi+k2);
     double cosThEE=k.get(3)/k.d3mag();
     tup.Fill(parent->getPDGId(), Q2, m2PsiK1, m2PsiK2, cosThEE, sqrt(Ptot*Ptot),(k1+kk1).mass2());
+    moms->Fill();
     if(i<0) {
       cout<<"(* debug print at i="<<i<<"========== *)"<<endl;
       cout<<" pPsi="<<pPsi<<endl;
@@ -127,10 +140,10 @@ int main(int argc, char** argv) {
       cout<<" Mtot="<<(kk1+kk2+k1+k2).mass()<<endl;
     };
     parent->deleteTree();
-
   }
 
   tup.Write();
+  moms->Write();
   file.Save();
 
   return 0;
