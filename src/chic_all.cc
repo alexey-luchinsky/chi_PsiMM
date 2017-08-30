@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 
   string outName=string("root_")+string(argv[1])+postfix+string(".root");
   TFile file(outName.c_str(),"RECREATE");
-  TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi");
+  TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi:m2K1KK1");
 
   // ======== MAIN LOOP ==========================
   int i;
@@ -97,16 +97,20 @@ int main(int argc, char** argv) {
     // Generate the event
     myGenerator->generateDecay(parent);
     // save the results
-    EvtVector4R pPsi = parent->getDaug(0)->getP4Lab();
+    EvtParticle *psi=parent->getDaug(0);
+    EvtVector4R pPsi = psi->getP4Lab();
     EvtVector4R k1=parent->getDaug(1)->getP4Lab();
     EvtVector4R k2=parent->getDaug(2)->getP4Lab();
     EvtVector4R k = k1+k2;
+    EvtVector4R kk1=psi->getDaug(0)->getP4Lab();
+    EvtVector4R kk2=psi->getDaug(1)->getP4Lab();
+
     EvtVector4R Ptot=pPsi+k1+k2;
     double Q2=k*k;
     double m2PsiK1 = (pPsi+k1)*(pPsi+k1);
     double m2PsiK2 = (pPsi+k2)*(pPsi+k2);
     double cosThEE=k.get(3)/k.d3mag();
-    tup.Fill(parent->getPDGId(), Q2, m2PsiK1, m2PsiK2, cosThEE, sqrt(Ptot*Ptot));
+    tup.Fill(parent->getPDGId(), Q2, m2PsiK1, m2PsiK2, cosThEE, sqrt(Ptot*Ptot),(k1+kk1).mass2());
     if(i<0) {
       cout<<"(* debug print at i="<<i<<"========== *)"<<endl;
       cout<<" pPsi="<<pPsi<<endl;
@@ -118,6 +122,9 @@ int main(int argc, char** argv) {
       cout<<" Ptot="<<Ptot<<endl;
       cout<<" Q2="<<(k1+k2)*(k1+k2)<<endl;
       cout<<" cosThEE="<<cosThEE<<endl;
+      cout<<"  psi daugs="<<parent->getDaug(0)->getNDaug()<<endl;
+      cout<<" kk1="<<parent->getDaug(0)->getDaug(0)->getP4Lab().mass()<<endl;
+      cout<<" Mtot="<<(kk1+kk2+k1+k2).mass()<<endl;
     };
     parent->deleteTree();
 

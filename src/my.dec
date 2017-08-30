@@ -9,4 +9,9 @@ Enddecay
 Decay chi_c2
 1 J/psi mu+ mu- TVP_mm;
 Enddecay
+
+Decay J/psi
+1 mu+ mu- VLL;
+Enddecay
+
 End
