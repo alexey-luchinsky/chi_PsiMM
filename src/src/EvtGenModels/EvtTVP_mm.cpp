@@ -94,9 +94,13 @@ void EvtTVP_mm::init(){
 }
 
 void EvtTVP_mm::initProbMax() {
-  if(getDaug(1).getId() == EvtPDL::getId("mu+").getId()) {
+  if(getDaug(1).getId() == EvtPDL::getId("mu+").getId() && getParentId()==EvtPDL::getId("chi_c2")) {
     cout<<"mu+"<<endl;
     setProbMax(520);  // tested on 1e6 events
+  }
+  if(getDaug(1).getId() == EvtPDL::getId("mu+").getId() && getParentId()==EvtPDL::getId("chi_b2")) {
+    cout<<"mu+"<<endl;
+    setProbMax(3000);  // tested on 1e6 events
   }
   if(getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
     cout<<"e+"<<endl;

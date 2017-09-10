@@ -1,3 +1,4 @@
+
 Decay chi_c0
 1 J/psi mu+ mu- SVP_mm;
 Enddecay
@@ -13,5 +14,22 @@ Enddecay
 Decay J/psi
 1 mu+ mu- VLL;
 Enddecay
+
+Decay chi_b0
+1 Upsilon  mu+ mu- SVP_mm;
+Enddecay
+
+Decay chi_b1
+1 Upsilon mu+ mu- VVP_mm;
+Enddecay
+
+Decay chi_b2
+1 Upsilon mu+ mu- TVP_mm;
+Enddecay
+
+Decay Upsilon
+1 mu+ mu- VLL;
+Enddecay
+
 
 End
