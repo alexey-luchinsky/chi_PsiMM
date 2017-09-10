@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
-project(directPsi CXX Fortran)
+project(directPsi CXX)
+enable_language(Fortran)
 
 
 MESSAGE("Hello, world")
@@ -38,6 +39,7 @@ file(GLOB_RECURSE evtgen_sources src/chic_all.cc src/*.for src/src/*)
 add_executable(chiC_all.exe ${evtgen_sources})
 target_link_libraries(chiC_all.exe ${ROOT_LIBRARIES} ${EVTGEN_LIBRARY_DIR}/archive/libEvtGen.a)
 target_link_libraries(chiC_all.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
+SET_TARGET_PROPERTIES(chiC_all.exe  PROPERTIES LINK_FLAGS -lgfortran)
 
 # adding sources for read_data
 add_executable(read_data.exe src/read_data.cc)

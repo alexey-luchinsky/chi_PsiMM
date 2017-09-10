@@ -1,8 +1,8 @@
 ################################################################################
  #    Copyright (C) 2014 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH    #
  #                                                                              #
- #              This software is distributed under the terms of the             # 
- #         GNU Lesser General Public Licence version 3 (LGPL) version 3,        #  
+ #              This software is distributed under the terms of the             #
+ #         GNU Lesser General Public Licence version 3 (LGPL) version 3,        #
  #                  copied verbatim in the file "LICENSE"                       #
  ################################################################################
 # - Try to find EvtGen instalation
@@ -14,6 +14,7 @@ MESSAGE(STATUS "Looking for EvtGen ...")
 FIND_PATH(EVTGEN_INCLUDE_DIR NAMES EvtGen/EvtGen.hh PATHS
   ${SIMPATH}/include/EvtGen
   /Users/luchinsky/Work/EvtGen/R01-06-00/
+  /afs/ihep.su/user/a/aluchins/local/EvtGen/R01-06-00/
   NO_DEFAULT_PATH
 )
 
@@ -21,6 +22,7 @@ FIND_PATH(EVTGEN_INCLUDE_DIR NAMES EvtGen/EvtGen.hh PATHS
 FIND_PATH(EVTGEN_LIBRARY_DIR NAMES libEvtGen.so PATHS
   ${SIMPATH}/lib
   /Users/luchinsky/Work/EvtGen/R01-06-00/lib/
+  /afs/ihep.su/user/a/aluchins/local/EvtGen/R01-06-00/lib/
   NO_DEFAULT_PATH
 )
 
@@ -29,6 +31,7 @@ FIND_PATH(EVTGEN_LIBRARY_DIR NAMES libEvtGen.so PATHS
 Find_Path(EVTGENDATA NAMES evt.pdl PATHS
   ${SIMPATH}/share/EvtGen/
   /Users/luchinsky/Work/EvtGen/R01-06-00/
+  /afs/ihep.su/user/a/aluchins/local/EvtGen/R01-06-00/
 )
 
 If (NOT EVTGENDATA)
@@ -49,4 +52,3 @@ else (EVTGEN_FOUND)
     message(FATAL_ERROR "Looking for EVTGEN... - Not found")
   endif (EVTGEN_FOUND_REQUIRED)
 endif (EVTGEN_FOUND)
-
