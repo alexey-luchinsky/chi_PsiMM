@@ -30,7 +30,7 @@ void setLorentzVector(TLorentzVector *out, EvtVector4R in) {
 
 int main(int argc, char** argv) {
 // ======== READ params ==========================
-  cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [decay_file=my_decay.dec] [postfix=]"<<endl;
+  cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [delta=1e5] [decay_file=my_decay.dec] [postfix=]"<<endl;
   if(argc<2) {
     cout<<"Wrong number of arguments!"<<endl;
     return 1;
@@ -41,15 +41,17 @@ int main(int argc, char** argv) {
   if(argc>2) nEvents=(int)atof(argv[2]);
   cout<<" nEvents="<<nEvents<<endl;
 
-
+  double delta=1e5;
+  if(argc>3) delta=atof(argv[3]);
+  cout<<" delta="<<delta<<endl;
 
   char *decay_file;
-  if(argc>3) decay_file=argv[3];
+  if(argc>4) decay_file=argv[4];
   else decay_file=(char*)"../src/my.dec";
   cout<<" decay_file = "<<decay_file<<endl;
 
   char *postfix;
-  if(argc>4) postfix=argv[4];
+  if(argc>5) postfix=argv[5];
   else postfix=(char*)"";
   cout<<"postfix="<<postfix<<endl;
 

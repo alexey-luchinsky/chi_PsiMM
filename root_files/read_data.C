@@ -33,6 +33,7 @@ void saveData(int id, string postfix) {
     cout<<"Unknown ID"<<endl;
     return;
   };
+  name = name + postfix;
   cout<<"Exporting histograms for id="<<id<<" ("<<name<<"), "<<tup->GetEntries(query.c_str())<<" entries"<<endl;
   cout<<" query="<<query<<endl;
   if(tup->GetEntries(query.c_str())>0) {
@@ -40,6 +41,7 @@ void saveData(int id, string postfix) {
     tup->Project("hQ20","q2",query.c_str()); write_histogram_to_file(*hQ20,("hQ2_"+name+".hst").c_str());
     tup->Project("hCos1","cosThEE",query.c_str()); write_histogram_to_file(*hCos1,("hCos_"+name+".hst").c_str());
     tup->Project("hm2PsiK1","m2PsiK1",query.c_str()); write_histogram_to_file(*hm2PsiK1,("hm2PsiK1_"+name+".hst").c_str());
+    tup->Project("hm2K1KK1","m2K1KK1",query.c_str()); write_histogram_to_file(*hm2PsiK1,("hm2K1KK1_"+name+".hst").c_str());
   }
   else {
     cout<<" No events for id="<<id<<endl;

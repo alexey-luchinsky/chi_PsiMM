@@ -68,6 +68,7 @@ void EvtSVP_mm::decay( EvtParticle *root ){
         EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
         EvtComplex amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/(k*p);
         amp = amp/(k*k);
+	amp *= pow(delta,2)/(pow(delta,2)-k.mass2());
         if(k.mass2()<0.0005) amp=0;
         vertex(iPsi, iMplus, iMminus, amp);
       };

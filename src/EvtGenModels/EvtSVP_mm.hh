@@ -35,7 +35,7 @@ class EvtSVP_mm:public  EvtDecayAmp  {
 
 public:
 
-  EvtSVP_mm() {}
+  EvtSVP_mm(double _delta=1e4) {delta=_delta;}
   virtual ~EvtSVP_mm();
 
   std::string getName();
@@ -45,6 +45,8 @@ public:
   void init();
 
   virtual void initProbMax();
+private:
+  double delta; // form factor parameter
 };
 
 #endif
