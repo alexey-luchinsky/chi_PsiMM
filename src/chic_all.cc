@@ -1,4 +1,5 @@
 #include "EvtGen/EvtGen.hh"
+#include <string.h>
 
 #include "EvtGenBase/EvtParticle.hh"
 #include "EvtGenBase/EvtParticleFactory.hh"
@@ -27,6 +28,11 @@ void setLorentzVector(TLorentzVector *out, EvtVector4R in) {
   out->SetXYZT(in.get(1), in.get(2), in.get(3), in.get(0));
 }
 
+string to_str(double dbl) {
+  char buffer[100];
+  sprintf(buffer,"%f",dbl);
+  return buffer;
+};
 
 int main(int argc, char** argv) {
 // ======== READ params ==========================
@@ -84,7 +90,7 @@ int main(int argc, char** argv) {
    static EvtId CHI = EvtPDL::getId(std::string(argv[1]));
 
 
-   string outName=string("root_")+string(argv[1])+"_delta_"+std::to_string(delta)+postfix+string(".root");
+   string outName=string("root_")+string(argv[1])+"_delta_"+to_str(delta)+postfix+string(".root");
   TFile file(outName.c_str(),"RECREATE");
   TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi:m2K1KK1");
   TTree *moms=new TTree("moms","moms");
