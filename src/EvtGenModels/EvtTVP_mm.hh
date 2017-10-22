@@ -16,7 +16,7 @@ class EvtTVP_mm:public  EvtDecayAmp  {
 
 public:
 
-  EvtTVP_mm() {}
+  EvtTVP_mm(double _delta=1e5) {delta=_delta;}
   virtual ~EvtTVP_mm();
 
   std::string getName() {return "TVP_mm";}
@@ -26,6 +26,8 @@ public:
   void init();
 
   virtual void initProbMax();
+private:
+  double delta;
 };
 
 #endif

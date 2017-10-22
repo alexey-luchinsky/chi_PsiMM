@@ -76,6 +76,7 @@ void EvtTVP_mm::decay( EvtParticle *root ){
           EvtVector4C vvv = (p*k)*eee - (k*eee)*p;
           EvtComplex amp = vvv*epsGamma;
           amp = amp/(k*k);
+	  amp *= pow(delta,2)/(pow(delta,2)-k.mass2());
           if(k.mass2()<0.0005) amp=0;
           vertex(iPols, amp);
         };

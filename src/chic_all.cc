@@ -72,9 +72,9 @@ int main(int argc, char** argv) {
 
   std::list<EvtDecayBase*> extraModels;
   EvtModel &modelist=EvtModel::instance();
-  modelist.registerModel(new EvtSVP_mm);
-  modelist.registerModel(new EvtVVP_mm);
-  modelist.registerModel(new EvtTVP_mm);
+  modelist.registerModel(new EvtSVP_mm(delta));
+  modelist.registerModel(new EvtVVP_mm(delta));
+  modelist.registerModel(new EvtTVP_mm(delta));
 
   EvtGen *myGenerator=new EvtGen(decay_file ,"../src/evt.pdl", eng,
                    radCorrEngine, &extraModels);
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
    static EvtId CHI = EvtPDL::getId(std::string(argv[1]));
 
 
-  string outName=string("root_")+string(argv[1])+postfix+string(".root");
+   string outName=string("root_")+string(argv[1])+"_delta_"+std::to_string(delta)+postfix+string(".root");
   TFile file(outName.c_str(),"RECREATE");
   TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi:m2K1KK1");
   TTree *moms=new TTree("moms","moms");

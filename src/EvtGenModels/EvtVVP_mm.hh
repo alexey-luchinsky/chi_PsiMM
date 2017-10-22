@@ -9,7 +9,7 @@ class EvtVVP_mm:public  EvtDecayAmp  {
 
 public:
 
-  EvtVVP_mm() {}
+  EvtVVP_mm(double _delta=1e5) {delta=_delta;}
   virtual ~EvtVVP_mm();
   
   std::string getName();
@@ -17,7 +17,9 @@ public:
 
   void initProbMax();
   void init();
-  void decay(EvtParticle *p); 
+  void decay(EvtParticle *p);
+private:
+  double delta;
 
 };
 

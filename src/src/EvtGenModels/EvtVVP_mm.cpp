@@ -59,6 +59,7 @@ void EvtVVP_mm::decay( EvtParticle *root ){
           // amp = e_{mu nu alpha beta} epsChi^mu epsPsi^nu epsGamma^alpha k^beta/k^2
           EvtComplex amp = k*dual(EvtGenFunctions::directProd(epsChi,epsPsi)).cont1(epsGamma);
           amp = amp/(k*k);
+	  amp *= pow(delta,2)/(pow(delta,2)-k.mass2());
           if(k.mass2()<0.0005) amp=0;
           vertex(iPols, amp);
         };
