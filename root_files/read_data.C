@@ -17,21 +17,14 @@ void write_histogram_to_file(TH1F &histogram, string file_name) {
 void saveData(int id, string postfix) {
   string query;
   string name;
-  if(id==10441) {
-    query="id==10441";
-    name="chic0";
-  }
-  else if(id==20443) {
-    query="id==20443";
-    name="chic1";
-  }
-  else if(id=445) {
-    query="id==445";
-    name="chic2";
-  }
-  else {
-    cout<<"Unknown ID"<<endl;
-    return;
+  switch(id) {
+  case 10441:     query="id==10441";     name="chic0"; break;
+  case 20443:     query="id==20443";     name="chic1"; break;
+  case 445:      query="id==445";        name="chic2"; break;
+  case 10551:     query="id==10551";     name="chib0"; break;
+  case 20553:     query="id==20553";     name="chib1"; break;
+  case 555:      query="id==555";        name="chib2"; break;
+  default:      cout<<"Unknown ID"<<endl;    return;
   };
   name = name + postfix;
   cout<<"Exporting histograms for id="<<id<<" ("<<name<<"), "<<tup->GetEntries(query.c_str())<<" entries"<<endl;
@@ -52,8 +45,9 @@ void saveData(int id, string postfix) {
 
 read_data(char *file_name, string postfix="") {
         _file=new TFile(file_name);
-        int idChi0=10441, idChi1=20443, idChi2=445;
-      saveData(idChi0,postfix);
-      saveData(idChi1,postfix);
-      saveData(idChi2,postfix);
+      int idChi0=10441, idChi1=20443, idChi2=445;
+      int idChiB0=10551, idChiB1=20553, idChiB2=555;
+
+      saveData(idChi0,postfix);  saveData(idChi1,postfix); saveData(idChi2,postfix);
+      saveData(idChiB0,postfix); saveData(idChiB1,postfix);saveData(idChiB2,postfix);
 }
