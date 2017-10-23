@@ -36,7 +36,7 @@ string to_str(double dbl) {
 
 int main(int argc, char** argv) {
 // ======== READ params ==========================
-  cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [delta=1e5] [decay_file=my_decay.dec] [postfix=]"<<endl;
+  cout<<"Format: ./chic_all.exe inParticle [nEv=1e6] [decay_file=my_decay.dec] [postfix=]"<<endl;
   if(argc<2) {
     cout<<"Wrong number of arguments!"<<endl;
     return 1;
@@ -47,17 +47,14 @@ int main(int argc, char** argv) {
   if(argc>2) nEvents=(int)atof(argv[2]);
   cout<<" nEvents="<<nEvents<<endl;
 
-  double delta=1e5;
-  if(argc>3) delta=atof(argv[3]);
-  cout<<" delta="<<delta<<endl;
 
   char *decay_file;
-  if(argc>4) decay_file=argv[4];
+  if(argc>3) decay_file=argv[3];
   else decay_file=(char*)"../src/my.dec";
   cout<<" decay_file = "<<decay_file<<endl;
 
   char *postfix;
-  if(argc>5) postfix=argv[5];
+  if(argc>4) postfix=argv[4];
   else postfix=(char*)"";
   cout<<"postfix="<<postfix<<endl;
 
@@ -78,9 +75,9 @@ int main(int argc, char** argv) {
 
   std::list<EvtDecayBase*> extraModels;
   EvtModel &modelist=EvtModel::instance();
-  modelist.registerModel(new EvtSVP_mm(delta));
-  modelist.registerModel(new EvtVVP_mm(delta));
-  modelist.registerModel(new EvtTVP_mm(delta));
+  modelist.registerModel(new EvtSVP_mm);
+  modelist.registerModel(new EvtVVP_mm);
+  modelist.registerModel(new EvtTVP_mm);
 
   EvtGen *myGenerator=new EvtGen(decay_file ,"../src/evt.pdl", eng,
                    radCorrEngine, &extraModels);
@@ -90,7 +87,7 @@ int main(int argc, char** argv) {
    static EvtId CHI = EvtPDL::getId(std::string(argv[1]));
 
 
-   string outName=string("root_")+string(argv[1])+"_delta_"+to_str(delta)+postfix+string(".root");
+   string outName=string("root_")+string(argv[1])+postfix+string(".root");
   TFile file(outName.c_str(),"RECREATE");
   TNtuple tup("tup","tup","id:q2:m2PsiK1:m2PsiK2:cosThEE:Mchi:m2K1KK1");
   TTree *moms=new TTree("moms","moms");

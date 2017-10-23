@@ -9,7 +9,7 @@ class EvtVVP_mm:public  EvtDecayAmp  {
 
 public:
 
-  EvtVVP_mm(double _delta=1e5) {delta=_delta;}
+  EvtVVP_mm() {}
   virtual ~EvtVVP_mm();
   
   std::string getName();

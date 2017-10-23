@@ -35,7 +35,7 @@ class EvtSVP_mm:public  EvtDecayAmp  {
 
 public:
 
-  EvtSVP_mm(double _delta=1e4) {delta=_delta;}
+  EvtSVP_mm() {  }
   virtual ~EvtSVP_mm();
 
   std::string getName();

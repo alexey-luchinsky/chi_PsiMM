@@ -31,6 +31,10 @@ void EvtVVP_mm::init(){
   checkSpinDaughter(0,EvtSpinType::VECTOR);
   checkSpinDaughter(1,EvtSpinType::DIRAC);
   checkSpinDaughter(2,EvtSpinType::DIRAC);
+  checkNArg(1);
+  delta = getArg(0);
+  checkNDaug(3);
+  cout<<"EvtVVP::init() delta="<<delta<<endl;
 }
 
 

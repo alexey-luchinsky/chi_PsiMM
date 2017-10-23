@@ -68,7 +68,12 @@ void EvtSVP_mm::decay( EvtParticle *root ){
         EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
         EvtComplex amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/(k*p);
         amp = amp/(k*k);
+	//	cout<<" before: amp="<<amp<<endl;
+	//cout<<" before: k^2="<<k.mass2()<<endl;
+	//cout<<" before: delta="<<delta<<endl;
+	//cout<<" before: FF="<<pow(delta,2)/(pow(delta,2)-k.mass2())<<endl;
 	amp *= pow(delta,2)/(pow(delta,2)-k.mass2());
+	//cout<<" after: amp="<<amp<<endl;
         if(k.mass2()<0.0005) amp=0;
         vertex(iPsi, iMplus, iMminus, amp);
       };
@@ -78,13 +83,14 @@ void EvtSVP_mm::decay( EvtParticle *root ){
 
 
 void EvtSVP_mm::init(){
-  checkNArg(0);
-  checkNDaug(3);
   checkSpinParent(EvtSpinType::SCALAR);
   checkSpinDaughter(0,EvtSpinType::VECTOR);
   checkSpinDaughter(1,EvtSpinType::DIRAC);
   checkSpinDaughter(2,EvtSpinType::DIRAC);
-
+  checkNArg(1);
+  delta = getArg(0);
+  checkNDaug(3);
+  cout<<"EvtSVP::init() delta="<<delta<<endl;
 }
 
 void EvtSVP_mm::initProbMax() {
