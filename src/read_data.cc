@@ -58,14 +58,6 @@ int main(int argc, char const *argv[]) {
     moms->SetBranchAddress("kk2", &_kk2);
 
     double minQ2 = moms->GetMinimum("q2"), maxQ2 = moms->GetMaximum("q2");
-    //    int nBins = 20;
-    //    TH1F *hQ2 = new TH1F("hQ2", "hQ2", nBins, minQ2, maxQ2);
-    //    for (int iEv = 0; iEv < moms->GetEntries(); ++iEv) {
-    //        moms->GetEntry(iEv);
-    //        hQ2->Fill(q2);
-    //    };
-    //
-    //    write_histogram_to_file(*hQ2, "hh.hst");
 
 
     // polarizations
