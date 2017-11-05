@@ -42,13 +42,15 @@ public:
   EvtDecayBase* clone();
 
   void decay(EvtParticle *p);
+  void decay_2body(EvtParticle *p);
+  void decay_3body(EvtParticle *p);
   void init();
 
   virtual void initProbMax();
 
 
 private:
-  int ncall;
+  double delta; // form factor parameter
 };
 
 #endif
