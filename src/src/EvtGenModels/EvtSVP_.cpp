@@ -14,8 +14,7 @@
 //
 //
 // Modification history:
-//	AVL	Jul 6, 2012	modle created
-//
+//	AVL	Jul 6, 2012	mode created
 //------------------------------------------------------------------------
 // 
 #include "EvtGenBase/EvtPatches.hh"

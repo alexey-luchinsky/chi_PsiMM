@@ -18,6 +18,7 @@
 #include "EvtGenModels/EvtVVP_mm.hh"
 #include "EvtGenModels/EvtTVP_mm.hh"
 #include "EvtGenModels/EvtSVP_.hh"
+#include "EvtGenModels/EvtVVP_.hh"
 
 #include "TFile.h"
 #include "TNtuple.h"
@@ -73,6 +74,7 @@ int main(int argc, char** argv) {
     modelist.registerModel(new EvtTVP_mm);
 
     modelist.registerModel(new EvtSVP_);
+    modelist.registerModel(new EvtVVP_);
 
     EvtGen *myGenerator = new EvtGen(decay_file, "../src/evt.pdl", eng,
             radCorrEngine, &extraModels);

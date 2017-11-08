@@ -5,5 +5,9 @@ Decay chi_c0
 1 J/psi mu+ mu- SVP_ ff;
 Enddecay
 
+Decay chi_c1
+#1 J/psi gamma VVP_;
+1 J/psi mu+ mu- VVP_ ff;
+Enddecay
 
 End
