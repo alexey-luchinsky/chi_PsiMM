@@ -10,4 +10,9 @@ Decay chi_c1
 1 J/psi mu+ mu- VVP_mm ff;
 Enddecay
 
+Decay chi_c2
+#1 gamma J/psi TVP;
+1 J/psi mu+ mu- TVP_mm ff;
+Enddecay
+
 End
