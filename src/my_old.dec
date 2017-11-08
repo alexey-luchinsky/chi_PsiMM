@@ -1,7 +1,7 @@
 Define ff 1e3
 
 Decay chi_c0
-1 gamma J/psi SVP;
+#1 gamma J/psi SVP;
 1 J/psi mu+ mu- SVP_mm ff;
 Enddecay
 
