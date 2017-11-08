@@ -121,46 +121,48 @@ int main(int argc, char** argv) {
 
         // Generate the event
         myGenerator->generateDecay(parent);
-//        cout << "[DEBUG] chic_all: 1" << endl;
+        //        cout << "[DEBUG] chic_all: 1" << endl;
         // save the results
         EvtParticle *psi = parent->getDaug(0);
         pPsi = psi->getP4Lab();
         setLorentzVector(_pPsi, pPsi);
-        if(i<10)
-            cout<<" i="<<i<<" pPsi="<<pPsi<<endl;
+        if (i < 10)
+            cout << " i=" << i << " pPsi=" << pPsi << endl;
+        double m2PsiK1, m2PsiK2, cosThEE;
+        EvtVector4R Ptot;
+        k1 = parent->getDaug(1)->getP4Lab();
+        setLorentzVector(_k1, k1);
+        k2 = parent->getDaug(2)->getP4Lab();
+        setLorentzVector(_k2, k2);
+        EvtVector4R k = k1 + k2;
         if (psi->getNDaug() == 3) {
-            k1 = parent->getDaug(1)->getP4Lab();
-            setLorentzVector(_k1, k1);
-            k2 = parent->getDaug(2)->getP4Lab();
-            setLorentzVector(_k2, k2);
-            EvtVector4R k = k1 + k2;
             kk1 = psi->getDaug(0)->getP4Lab();
             setLorentzVector(_kk1, kk1);
             kk2 = psi->getDaug(1)->getP4Lab();
             setLorentzVector(_kk2, kk2);
+        };
 
-            EvtVector4R Ptot = pPsi + k1 + k2;
-            Q2 = k*k;
-            double m2PsiK1 = (pPsi + k1)*(pPsi + k1);
-            double m2PsiK2 = (pPsi + k2)*(pPsi + k2);
-            double cosThEE = k.get(3) / k.d3mag();
-            tup.Fill(parent->getPDGId(), Q2, m2PsiK1, m2PsiK2, cosThEE, sqrt(Ptot * Ptot), (k1 + kk1).mass2());
-            moms->Fill();
-            if (i < 0) {
-                cout << "(* debug print at i=" << i << "========== *)" << endl;
-                cout << " pPsi=" << pPsi << endl;
-                cout << " Mpsi=" << sqrt(pPsi * pPsi) << endl;
-                cout << " k1=" << k1 << endl;
-                cout << " mmu=" << sqrt(k1 * k1) << endl;
-                cout << " k2=" << k2 << endl;
-                cout << " mmu=" << sqrt(k2 * k2) << endl;
-                cout << " Ptot=" << Ptot << endl;
-                cout << " Q2=" << (k1 + k2)*(k1 + k2) << endl;
-                cout << " cosThEE=" << cosThEE << endl;
-                cout << "  psi daugs=" << parent->getDaug(0)->getNDaug() << endl;
-                cout << " kk1=" << parent->getDaug(0)->getDaug(0)->getP4Lab().mass() << endl;
-                cout << " Mtot=" << (kk1 + kk2 + k1 + k2).mass() << endl;
-            };
+        Ptot = pPsi + k1 + k2;
+        Q2 = k*k;
+        m2PsiK1 = (pPsi + k1)*(pPsi + k1);
+        m2PsiK2 = (pPsi + k2)*(pPsi + k2);
+        cosThEE = k.get(3) / k.d3mag();
+        tup.Fill(parent->getPDGId(), Q2, m2PsiK1, m2PsiK2, cosThEE, sqrt(Ptot * Ptot), (k1 + kk1).mass2());
+        moms->Fill();
+        if (i < 0) {
+            cout << "(* debug print at i=" << i << "========== *)" << endl;
+            cout << " pPsi=" << pPsi << endl;
+            cout << " Mpsi=" << sqrt(pPsi * pPsi) << endl;
+            cout << " k1=" << k1 << endl;
+            cout << " mmu=" << sqrt(k1 * k1) << endl;
+            cout << " k2=" << k2 << endl;
+            cout << " mmu=" << sqrt(k2 * k2) << endl;
+            cout << " Ptot=" << Ptot << endl;
+            cout << " Q2=" << (k1 + k2)*(k1 + k2) << endl;
+            cout << " cosThEE=" << cosThEE << endl;
+            cout << "  psi daugs=" << parent->getDaug(0)->getNDaug() << endl;
+            cout << " kk1=" << parent->getDaug(0)->getDaug(0)->getP4Lab().mass() << endl;
+            cout << " Mtot=" << (kk1 + kk2 + k1 + k2).mass() << endl;
         };
         parent->deleteTree();
     }

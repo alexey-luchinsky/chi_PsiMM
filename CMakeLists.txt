@@ -32,14 +32,22 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
 
 
 
+include_directories(src/)
 
 # adding sources for EvtGen
-include_directories(src/)
 file(GLOB_RECURSE evtgen_sources src/chic_all.cc src/*.for src/src/*)
 add_executable(chiC_all.exe ${evtgen_sources})
 target_link_libraries(chiC_all.exe ${ROOT_LIBRARIES} ${EVTGEN_LIBRARY_DIR}/archive/libEvtGen.a)
 target_link_libraries(chiC_all.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
 SET_TARGET_PROPERTIES(chiC_all.exe  PROPERTIES LINK_FLAGS -lgfortran)
+
+# adding sources for test.exe
+file(GLOB_RECURSE test_sources src/test.cc src/*.for src/src/*)
+add_executable(test.exe ${test_sources})
+target_link_libraries(test.exe ${ROOT_LIBRARIES} ${EVTGEN_LIBRARY_DIR}/archive/libEvtGen.a)
+target_link_libraries(test.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
+SET_TARGET_PROPERTIES(test.exe  PROPERTIES LINK_FLAGS -lgfortran)
+
 
 # adding sources for read_data
 add_executable(read_data.exe src/read_data.cc)
