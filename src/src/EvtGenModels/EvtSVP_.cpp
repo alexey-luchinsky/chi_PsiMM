@@ -53,24 +53,44 @@ EvtDecayBase* EvtSVP_::clone() {
 
 void EvtSVP_::decay_2body(EvtParticle* root) {
     root ->initializePhaseSpace(getNDaug(), getDaugs());
+
     EvtVector4R p = root->getDaug(1)->getP4(), // J/psi momentum
             k = root->getDaug(0)->getP4(); // Photon momentum
-    for (int iPsi = 0; iPsi < 4; iPsi++) {
-        for (int iGamma = 0; iGamma < 1; iGamma++) {
+    for (int iPsi = 0; iPsi < 3; iPsi++) {
+        for (int iGamma = 0; iGamma < 2; iGamma++) {
             EvtVector4C epsPsi = root->getDaug(1)->epsParent(iPsi).conj();
             EvtVector4C epsGamma = root->getDaug(0)->epsParentPhoton(iGamma).conj();
             EvtComplex amp = (epsPsi * epsGamma) - (epsPsi * k)*(epsGamma * p) / (k * p);
             vertex(iGamma, iPsi, amp);
-        }
-    }
+        };
+    };
 }
 
 void EvtSVP_::decay_3body(EvtParticle* root) {
     root ->initializePhaseSpace(getNDaug(), getDaugs());
+
     EvtVector4R p = root->getDaug(0)->getP4(), // J/psi momentum
             k1 = root->getDaug(1)->getP4(), // mu+ momentum
             k2 = root->getDaug(2)->getP4(), // mu- momentum
             k = k1 + k2; // photon momentum
+
+    double kSq = k*k;
+    if (kSq < 1e-10) {
+        return;
+    }
+    double kp = k*p;
+    if (fabs(kp) < 1e-10) {
+        return;
+    }
+
+    double dSq = delta*delta;
+    double dSqDenom = dSq - k.mass2();
+    if (fabs(dSqDenom) < 1e-10) {
+        return;
+    }
+
+    double factor = dSq / (dSqDenom * kSq);
+
     for (int iPsi = 0; iPsi < 3; ++iPsi) {
         EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
         for (int iMplus = 0; iMplus < 2; ++iMplus) {
@@ -78,15 +98,12 @@ void EvtSVP_::decay_3body(EvtParticle* root) {
             for (int iMminus = 0; iMminus < 2; ++iMminus) {
                 EvtDiracSpinor spMminus = root->getDaug(2)->spParent(iMminus);
                 EvtVector4C epsGamma = EvtLeptonVCurrent(spMplus, spMminus);
-                EvtComplex amp = (epsPsi * epsGamma) - (epsPsi * k)*(epsGamma * p) / (k * p);
-                amp = amp / (k * k);
-                amp *= pow(delta, 2) / (pow(delta, 2) - k.mass2());
-                if (k.mass2() < 0.0005) amp = 0;
+                EvtComplex amp = (epsPsi * epsGamma) - (epsPsi * k)*(epsGamma * p) / kp;
+                amp *= factor;
                 vertex(iPsi, iMplus, iMminus, amp);
             };
         };
     };
-
 }
 
 void EvtSVP_::decay(EvtParticle *root) {

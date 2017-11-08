@@ -59,6 +59,18 @@ void EvtSVP_mm::decay( EvtParticle *root ){
     k1 = root->getDaug(1)->getP4(),        // mu+ momentum
     k2 = root->getDaug(2)->getP4(),        // mu- momentum
     k=k1+k2;                               // photon momentum
+
+  double kSq = k*k;
+  if (kSq < 1e-10) {return;}
+  double kp = k*p;
+  if (fabs(kp) < 1e-10) {return;}
+
+  double dSq = delta*delta;
+  double dSqDenom = dSq - k.mass2();
+  if (fabs(dSqDenom) < 1e-10) {return;}
+
+  double factor = dSq/(dSqDenom*kSq);
+
   for(int iPsi=0; iPsi<3; ++iPsi) {
     EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
     for(int iMplus=0; iMplus<2; ++iMplus) {
@@ -66,15 +78,8 @@ void EvtSVP_mm::decay( EvtParticle *root ){
       for(int iMminus=0; iMminus<2; ++iMminus) {
         EvtDiracSpinor spMminus=root->getDaug(2)->spParent(iMminus);
         EvtVector4C epsGamma=EvtLeptonVCurrent(spMplus,spMminus);
-        EvtComplex amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/(k*p);
-        amp = amp/(k*k);
-	//	cout<<" before: amp="<<amp<<endl;
-	//cout<<" before: k^2="<<k.mass2()<<endl;
-	//cout<<" before: delta="<<delta<<endl;
-	//cout<<" before: FF="<<pow(delta,2)/(pow(delta,2)-k.mass2())<<endl;
-	amp *= pow(delta,2)/(pow(delta,2)-k.mass2());
-	//cout<<" after: amp="<<amp<<endl;
-        if(k.mass2()<0.0005) amp=0;
+        EvtComplex amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/kp;
+        amp *= factor;
         vertex(iPsi, iMplus, iMminus, amp);
       };
     };

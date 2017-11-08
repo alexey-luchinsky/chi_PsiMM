@@ -118,6 +118,6 @@ void print_mean(TNtuple *tup, string var) {
     const char *cvar=var.c_str();
     TH1F *hist=new TH1F(cvar,cvar,10,tup->GetMinimum(cvar),tup->GetMaximum(cvar));
     tup->Project(cvar,cvar);
-    cout<<"<"<<var<<">="<<hist->GetMean()<<endl;
+    cout<<"<"<<var<<">="<<hist->GetMean()<<" "<<hist->GetRMS()<<endl;
     delete hist;
 }
