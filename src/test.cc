@@ -1,5 +1,6 @@
 #include "EvtGen/EvtGen.hh"
 #include <string.h>
+#include <iomanip>
 
 #include "EvtGenBase/EvtParticle.hh"
 #include "EvtGenBase/EvtParticleFactory.hh"
@@ -27,7 +28,23 @@
 #include "TH1F.h"
 using namespace std;
 
-void print_mean(TNtuple *tup, string var);
+void print_mean(TNtuple *tup, string var, string postfix);
+
+void write_histogram_to_file(TH1F &histogram, string file_name, int ngroup=1) {
+    const char *__file_name__ = file_name.c_str();
+    remove(__file_name__);
+    ofstream file;
+        cout<<"Extporting histogram "<<file_name<<endl;
+    file.open(__file_name__);
+    histogram.Rebin(ngroup);
+    for (int i = 1; i <= histogram.GetNbinsX(); i++)
+        file << setiosflags(ios::scientific) << histogram.GetBinCenter(i) <<
+        " " << setiosflags(ios::scientific) << histogram.GetBinContent(i) / histogram.GetBinWidth(i) <<
+        " " << setiosflags(ios::scientific) << histogram.GetBinError(i) / histogram.GetBinWidth(i) << endl;
+    file.close();
+    cout<<"\t integral="<<histogram.Integral()<<" nBins="<<histogram.GetNbinsX()<<endl;
+}
+
 
 int main(int argc, char** argv) {
     // ======== READ params ==========================
@@ -112,16 +129,18 @@ int main(int argc, char** argv) {
     tup.Write();
     file.Save();
     cout<<"================"<<endl;
-    print_mean(&tup,"e1");print_mean(&tup,"pz1");
-    print_mean(&tup,"e2");print_mean(&tup,"pz2");
-    print_mean(&tup,"e3");print_mean(&tup,"pz3");
+    string postfix_=string(argv[1])+"_"+postfix;
+    print_mean(&tup,"e1",postfix_);print_mean(&tup,"pz1",postfix_);
+    print_mean(&tup,"e2",postfix_);print_mean(&tup,"pz2",postfix_);
+    print_mean(&tup,"e3",postfix_);print_mean(&tup,"pz3",postfix_);
     return 0;
 }
 
-void print_mean(TNtuple *tup, string var) {
+void print_mean(TNtuple *tup, string var, string postfix) {
     const char *cvar=var.c_str();
     TH1F *hist=new TH1F(cvar,cvar,10,tup->GetMinimum(cvar),tup->GetMaximum(cvar));
     tup->Project(cvar,cvar);
     cout<<"<"<<var<<">="<<hist->GetMean()<<" "<<hist->GetRMS()<<endl;
+    write_histogram_to_file(*hist,var+"_"+postfix+".hst");
     delete hist;
 }
