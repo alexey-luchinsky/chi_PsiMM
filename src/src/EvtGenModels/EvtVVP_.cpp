@@ -152,10 +152,10 @@ void EvtVVP_::init() {
 }
 
 void EvtVVP_::initProbMax() {
-    if (getNDaug() == 2) setProbMax(4.0);
+    if (getNDaug() == 2) setProbMax(1.5);
     else if (getNDaug() == 3) {
         if (getDaug(1).getId() == EvtPDL::getId("mu+").getId()) {
-            setProbMax(550); // tested on 1e6 events
+            setProbMax(15); // tested on 1e6 events
         }
         if (getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
             setProbMax(8e3); // tested on 1e6 events

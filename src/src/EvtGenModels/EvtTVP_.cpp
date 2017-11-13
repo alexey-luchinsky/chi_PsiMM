@@ -153,7 +153,7 @@ void EvtTVP_::initProbMax() {
     else if (getNDaug() == 3) {
         double ffCor = pow(pow(delta, 2) / (pow(delta, 2) - 0.2), 2);
         if (getDaug(1).getId() == EvtPDL::getId("mu+").getId() && getParentId() == EvtPDL::getId("chi_c2")) {
-            setProbMax(ffCor * 520); // tested on 1e6 events
+            setProbMax(ffCor * 85); // tested on 1e6 events
         }
         if (getDaug(1).getId() == EvtPDL::getId("mu+").getId() && getParentId() == EvtPDL::getId("chi_b2")) {
             setProbMax(ffCor * 3000); // tested on 1e6 events

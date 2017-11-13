@@ -109,9 +109,9 @@ int main(int argc, char** argv) {
     TNtuple tup("tup", "tup", "e1:pz1:e2:pz2:e3:pz3");
 
     for (int iEv = 0; iEv < nEvents; iEv++) {
-//        if (iEv % (nEvents / 10) == 0) {
-//            cout << "========= " << (int) (100. * iEv / nEvents) << " % ==========" << endl;
-//        };
+        if (iEv % (nEvents / 10) == 0) {
+            cout << "========= " << (int) (100. * iEv / nEvents) << " % ==========" << endl;
+        };
         // Set up the parent particle
         EvtVector4R pInit(EvtPDL::getMass(CHI), 0.0, 0.0, 0.0);
         parent = EvtParticleFactory::particleFactory(CHI, pInit);
