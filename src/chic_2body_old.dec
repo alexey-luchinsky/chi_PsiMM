@@ -1,0 +1,15 @@
+Define ff 1e3
+
+Decay chi_c0
+1 gamma J/psi SVP;
+Enddecay
+
+Decay chi_c1
+1 J/psi gamma VVP 1 2 3 4 5 8 7 8;
+Enddecay
+
+Decay chi_c2
+1 gamma J/psi TVP;
+Enddecay
+
+End

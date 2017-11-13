@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
     double e1,pz1,e2,pz2,e3,pz3;
     EvtVector4R p1,p2,p3;
     string outName = string("test_") + string(argv[1]) + postfix + string(".root");
-    TFile file(outName.c_str(), "RECREATE");
+//    TFile file(outName.c_str(), "RECREATE");
     TNtuple tup("tup", "tup", "e1:pz1:e2:pz2:e3:pz3");
 
     for (int iEv = 0; iEv < nEvents; iEv++) {
@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
     }
 
     tup.Write();
-    file.Save();
+//    file.Save();
     cout<<"================"<<endl;
     string postfix_=string(argv[1])+"_"+postfix;
     print_mean(&tup,"e1",postfix_);print_mean(&tup,"pz1",postfix_);
@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
 
 void print_mean(TNtuple *tup, string var, string postfix) {
     const char *cvar=var.c_str();
-    TH1F *hist=new TH1F(cvar,cvar,10,tup->GetMinimum(cvar),tup->GetMaximum(cvar));
+    TH1F *hist=new TH1F(cvar,cvar,30,tup->GetMinimum(cvar),tup->GetMaximum(cvar));
     tup->Project(cvar,cvar);
     cout<<"<"<<var<<">="<<hist->GetMean()<<" "<<hist->GetRMS()<<endl;
     write_histogram_to_file(*hist,var+"_"+postfix+".hst");
