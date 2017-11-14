@@ -105,8 +105,22 @@ int main(int argc, char** argv) {
     double e1,pz1,e2,pz2,e3,pz3;
     EvtVector4R p1,p2,p3;
     string outName = string("test_") + string(argv[1]) + postfix + string(".root");
-//    TFile file(outName.c_str(), "RECREATE");
+    TFile file(outName.c_str(), "RECREATE");
     TNtuple tup("tup", "tup", "e1:pz1:e2:pz2:e3:pz3");
+    TTree *moms = new TTree("moms", "moms");
+    EvtVector4R pPsi, k1, k2, kk1, kk2;
+    TLorentzVector *_pPsi = new TLorentzVector;
+    moms->Branch("pPsi", "TLorentzVector", &_pPsi);
+    TLorentzVector *_k1 = new TLorentzVector;
+    moms->Branch("k1", "TLorentzVector", &_k1);
+    TLorentzVector *_k2 = new TLorentzVector;
+    moms->Branch("k2", "TLorentzVector", &_k2);
+    TLorentzVector *_kk1 = new TLorentzVector;
+    moms->Branch("kk1", "TLorentzVector", &_kk1);
+    TLorentzVector *_kk2 = new TLorentzVector;
+    moms->Branch("kk2", "TLorentzVector", &_kk2);
+    double Q2;
+    moms->Branch("q2", &Q2);
 
     for (int iEv = 0; iEv < nEvents; iEv++) {
         if (iEv % (nEvents / 10) == 0) {
@@ -127,7 +141,7 @@ int main(int argc, char** argv) {
     }
 
     tup.Write();
-//    file.Save();
+    file.Save();
     cout<<"================"<<endl;
     string postfix_=string(argv[1])+"_"+postfix;
     print_mean(&tup,"e1",postfix_);print_mean(&tup,"pz1",postfix_);
