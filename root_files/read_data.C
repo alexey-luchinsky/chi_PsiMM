@@ -61,9 +61,9 @@ void saveData(int id, string postfix, int ngroup=1) {
 
 TChain *chainc, *chainb;
 
-read_data_chi(string fff="max", string postfix="",int ngroup=1) {
+read_data_chi(string fileName="max", string postfix="",int ngroup=1) {
   TChain chain("tup");
-  chain.Add(("root_chi*_"+fff+".root").c_str());
+  chain.Add(fileName.c_str());
   cout<<tup->GetEntries()<<" entries"<<endl;
   int idChi0=10441, idChi1=20443, idChi2=445;
   int idChiB0=10551, idChiB1=20553, idChiB2=555;
