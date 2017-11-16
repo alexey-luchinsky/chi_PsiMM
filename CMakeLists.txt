@@ -56,7 +56,7 @@ target_link_libraries(read_data.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
 
 
 # adding sources for MMSh
-add_executable(MMSh.exe src/MMSh/MMSh.c++ src/MMSh/rambo_.for src/MMSh/kinematics.c++)
+add_executable(MMSh.exe src/MMSh/MMSh.c++ src/MMSh/rambo_.for src/MMSh/kinematics.c++ src/MMSh/matr2.c++)
 target_link_libraries(MMSh.exe ${ROOT_LIBRARIES})
 #target_link_libraries(MMSh.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
 SET_TARGET_PROPERTIES(MMSh.exe  PROPERTIES LINK_FLAGS -lgfortran)
