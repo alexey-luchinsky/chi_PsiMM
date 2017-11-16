@@ -3,3 +3,5 @@ root_files/
 *.hst
 
 *.root
+*.pdf
+python/.ipynb_checkpoints
