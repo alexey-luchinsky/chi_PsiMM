@@ -171,9 +171,59 @@ void test_chi0(int nEv) {
     cout << "chi_c0: sum=" << sum << endl;
 }
 
+void test_chi1(int nEv) {
+    cout<<"*********************** chi_c1 ***********************"<<endl;
+    TNtuple tup("chic1", "chic1", "q2:m2PsiK1:matr2:wt");
+    double p[4], k1[4], k2[4];
+    const int nOut = 3;
+    double XM[nOut] = {Mpsi, mmu, mmu};
+    double sum = 0;
+    for (int iEv = 0; iEv < nEv; ++iEv) {
+        if (iEv % (nEv / 10) == 0) {
+            cout << "========= " << (int) (100. * iEv / nEv) << " % ==========" << endl;
+        };
+        double wt = ram3_(Mchi1, XM, p, k1, k2);
+        double matr2 = matr2_1(p, k1, k2);
+        double q2 = sum_mass2(k1, k2);
+        double m2PsiK1 = sum_mass2(p, k1);
+        tup.Fill(q2,m2PsiK1,matr2,wt);
+        sum += wt*matr2;
+    };
+    sum /= nEv;
+    tup.Write();
+    cout << "chi_c0: sum=" << sum << endl;
+}
+
+void test_chi2(int nEv) {
+    cout<<"*********************** chi_c2 ***********************"<<endl;
+    TNtuple tup("chic2", "chic2", "q2:m2PsiK1:matr2:wt");
+    double p[4], k1[4], k2[4];
+    const int nOut = 3;
+    double XM[nOut] = {Mpsi, mmu, mmu};
+    double sum = 0;
+    for (int iEv = 0; iEv < nEv; ++iEv) {
+        if (iEv % (nEv / 10) == 0) {
+            cout << "========= " << (int) (100. * iEv / nEv) << " % ==========" << endl;
+        };
+        double wt = ram3_(Mchi2, XM, p, k1, k2);
+        double matr2 = matr2_2(p, k1, k2);
+        double q2 = sum_mass2(k1, k2);
+        double m2PsiK1 = sum_mass2(p, k1);
+        tup.Fill(q2,m2PsiK1,matr2,wt);
+        sum += wt*matr2;
+    };
+    sum /= nEv;
+    tup.Write();
+    cout << "chi_c0: sum=" << sum << endl;
+}
+
+
 int main(void) {
     //    test_2body(1e4);
     TFile file("matr2_chic0.root", "RECREATE");
-    test_chi0(1e6);
+    int nEv=1e6;
+    test_chi0(nEv);
+    test_chi1(nEv);
+    test_chi2(nEv);
     file.Save();
 }
