@@ -57,6 +57,6 @@ target_link_libraries(read_data.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
 
 # adding sources for MMSh
 add_executable(MMSh.exe src/MMSh/MMSh.c++ src/MMSh/rambo_.for)
-#target_link_libraries(MMSh.exe ${ROOT_LIBRARIES} ${EVTGEN_LIBRARY_DIR}/archive/libEvtGen.a)
+target_link_libraries(MMSh.exe ${ROOT_LIBRARIES})
 #target_link_libraries(MMSh.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
 SET_TARGET_PROPERTIES(MMSh.exe  PROPERTIES LINK_FLAGS -lgfortran)

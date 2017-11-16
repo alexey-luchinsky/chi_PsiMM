@@ -1,5 +1,9 @@
 #include <iostream>
 #include "math.h"
+
+#include "TFile.h"
+#include "TNtuple.h"
+
 using namespace std;
 
 extern "C" {
@@ -96,14 +100,14 @@ void test_3body(int nEv) {
     cout << " sum=" << sum << endl;
 }
 
-double const mmu = 0.10565837,  Mpsi = 3.0969160;
-double const Mchi0=3.4147501, Mchi1=3.5106599, Mchi2=3.5562000;
+double mmu = 0.10565837, Mpsi = 3.0969160;
+double Mchi0 = 3.4147501, Mchi1 = 3.5106599, Mchi2 = 3.5562000;
 
 double matr2_0(double pPsi[4], double k1[4], double k2[4]) {
     double q2 = sum_mass2(k1, k2);
     double m2PsiK1 = sum_mass2(pPsi, k1);
     double alpha = 1. / 137;
-    double const Mchi=Mchi0;
+    double const Mchi = Mchi0;
     return 16 * alpha * PI * pow(q2, -2)*(pow(Mchi, 4)*(q2 + 2 * pow(mmu, 2)) + 2 * q2 * pow(mmu, 4) -
             2 * pow(Mchi, 2)*(q2 * (m2PsiK1 + q2) + pow(mmu, 2)*(q2 + 2 * pow(Mpsi, 2))) +
             2 * pow(mmu, 2)*(-2 * m2PsiK1 * q2 + 3 * q2 * pow(Mpsi, 2) + pow(Mpsi, 4)) + q2 * (2 * pow(m2PsiK1, 2) -
@@ -115,7 +119,7 @@ double matr2_1(double pPsi[4], double k1[4], double k2[4]) {
     double q2 = sum_mass2(k1, k2);
     double m2PsiK1 = sum_mass2(pPsi, k1);
     double alpha = 1. / 137;
-    double const Mchi=Mchi1;
+    double const Mchi = Mchi1;
     return 4 * alpha * PI * pow(Mchi, -2) * pow(Mpsi, -2) * pow(q2, -2)*(pow(Mchi, 6)*(q2 + 2 * pow(mmu, 2)) -
             pow(Mchi, 4)*(q2 * (2 * m2PsiK1 + 2 * q2 - pow(Mpsi, 2)) + 2 * pow(mmu, 2)*(q2 + pow(Mpsi, 2))) +
             pow(Mchi, 2)*(2 * q2 * pow(mmu, 4) - 2 * pow(mmu, 2)*(2 * m2PsiK1 * q2 - 6 * q2 * pow(Mpsi, 2) + pow(Mpsi, 4)) +
@@ -128,7 +132,7 @@ double matr2_2(double pPsi[4], double k1[4], double k2[4]) {
     double q2 = sum_mass2(k1, k2);
     double m2PsiK1 = sum_mass2(pPsi, k1);
     double alpha = 1. / 137;
-    double const Mchi=Mchi2;
+    double const Mchi = Mchi2;
     return (alpha * PI * pow(Mchi, -4) * pow(Mpsi, -2) * pow(q2, -2)*(3 * pow(Mchi, 10)*(q2 + 2 * pow(mmu, 2)) +
             2 * pow(Mchi, 8)*(q2 * (-3 * m2PsiK1 - 6 * q2 + 17 * pow(Mpsi, 2)) + pow(mmu, 2)*(-9 * q2 + 28 * pow(Mpsi, 2))) +
             2 * pow(Mchi, 6)*(3 * q2 * pow(mmu, 4) - pow(mmu, 2)*(6 * m2PsiK1 * q2 + 19 * q2 * pow(Mpsi, 2) + 62 * pow(Mpsi, 4) - 5 * pow(q2, 2)) +
@@ -144,6 +148,32 @@ double matr2_2(double pPsi[4], double k1[4], double k2[4]) {
             (-2 * q2 * pow(Mpsi, 2) + 3 * pow(Mpsi, 4) + 3 * pow(q2, 2)) * pow(-q2 + pow(Mpsi, 2), 2))))) / 3.;
 }
 
+void test_chi0(int nEv) {
+    cout<<"*********************** chi_c0 ***********************"<<endl;
+    TNtuple tup("chic0", "chic0", "q2:m2PsiK1:matr2:wt");
+    double p[4], k1[4], k2[4];
+    const int nOut = 3;
+    double XM[nOut] = {Mpsi, mmu, mmu};
+    double sum = 0;
+    for (int iEv = 0; iEv < nEv; ++iEv) {
+        if (iEv % (nEv / 10) == 0) {
+            cout << "========= " << (int) (100. * iEv / nEv) << " % ==========" << endl;
+        };
+        double wt = ram3_(Mchi0, XM, p, k1, k2);
+        double matr2 = matr2_0(p, k1, k2);
+        double q2 = sum_mass2(k1, k2);
+        double m2PsiK1 = sum_mass2(p, k1);
+        tup.Fill(q2,m2PsiK1,matr2,wt);
+        sum += wt*matr2;
+    };
+    sum /= nEv;
+    tup.Write();
+    cout << "chi_c0: sum=" << sum << endl;
+}
+
 int main(void) {
-    test_2body(1e4);
+    //    test_2body(1e4);
+    TFile file("matr2_chic0.root", "RECREATE");
+    test_chi0(1e6);
+    file.Save();
 }
