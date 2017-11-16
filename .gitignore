@@ -2,3 +2,4 @@ build/
 root_files/
 *.hst
 
+*.root
