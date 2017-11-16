@@ -1,4 +1,5 @@
 #include <iostream>
+#include "math.h"
 using namespace std;
 
 extern "C" {
@@ -17,58 +18,84 @@ double rndm2_(double dummy) {
 void print_v4(double p[4]) {
     cout << "{" << p[3] << "," << p[0] << "," << p[1] << "," << p[2] << "}";
 }
+
 void print_v4(string name, double p[4]) {
-    cout<<name<<"="; print_v4(p);
+    cout << name << "=";
+    print_v4(p);
 }
+
 void println_v4(double p[4]) {
     print_v4(p);
     cout << endl;
 };
 
 void println_v4(string name, double p[4]) {
-    cout<<name<<"="; println_v4(p);
+    cout << name << "=";
+    println_v4(p);
 }
 
 double sp(double p1[4], double p2[4]) {
-    return p1[3]*p2[3]-p1[0]*p2[0]-p1[1]*p2[1]-p1[2]*p2[2];
+    return p1[3] * p2[3] - p1[0] * p2[0] - p1[1] * p2[1] - p1[2] * p2[2];
 }
-double sp(double p[4]) {return sp(p,p);}
+
+double sp(double p[4]) {
+    return sp(p, p);
+}
 
 void sum(double *p1, double *p2, double *P) {
-    for(int i=0; i<4; ++i) P[i]=p1[i]+p2[i];
+    for (int i = 0; i < 4; ++i) P[i] = p1[i] + p2[i];
 }
+
 void sum(double *p1, double *p2, double *p3, double *P) {
-    for(int i=0; i<4; ++i) P[i]=p1[i]+p2[i]+p3[i];
+    for (int i = 0; i < 4; ++i) P[i] = p1[i] + p2[i] + p3[i];
 }
+
 double sum_mass2(double *p1, double *p2) {
     double P[4];
-    sum(p1,p2,P);
-    return sp(P);
-}
-double sum_mass2(double *p1, double *p2, double *p3) {
-    double P[4];
-    sum(p1,p2,p3,P);
+    sum(p1, p2, P);
     return sp(P);
 }
 
+double sum_mass2(double *p1, double *p2, double *p3) {
+    double P[4];
+    sum(p1, p2, p3, P);
+    return sp(P);
+}
+    double const PI = acos(-1), TWO_PI=2*PI;
+
+void test_2body(int nEv) {
+    const int nOut = 2;
+    double mmu = 10;
+    double XM[nOut] = {0, 0};
+    double p1[4], p2[4];
+
+    double sum = 0;
+    for (int iEv = 0; iEv < nEv; ++iEv) {
+        double wt = ram2_(mmu, XM, p1, p2);
+        wt *= pow(TWO_PI,4-3*nOut);
+        sum += wt;
+    };
+    sum /= nEv;
+    cout<<" sum="<<sum<<" vs "<<1./(8*PI)<<endl;
+    
+}
 
 void test_3body(int nEv) {
     const int nOut = 3;
-    double mmu = 0.1056;
+    double mmu = 10;
     double XM[nOut] = {0, 0, 0};
     double p1[4], p2[4], p3[4], P[4];
-    double wt = ram3_(mmu, XM, p1, p2, p3);
-    println_v4("p1",p1);
-    cout<<" m1^2="<<sp(p1)<<endl;
-    println_v4("p2",p2);
-    cout<<" m2^2="<<sp(p2)<<endl;
-    println_v4("p3",p3);
-    cout<<" m3^2="<<sp(p3)<<endl;
-    sum(p1,p2,p3,P);
-    println_v4("P",P);
-    cout << " wt=" << wt << endl;
+
+    double sum = 0;
+    for (int iEv = 0; iEv < nEv; ++iEv) {
+        double wt = ram3_(mmu, XM, p1, p2, p3);
+        wt *= pow(TWO_PI,4-3*nOut);
+        sum += wt;
+    };
+    sum /= nEv;
+    cout<<" sum="<<sum<<endl;
 }
 
 int main(void) {
-    test_3body(1e4);
+    test_2body(1e4);
 }
