@@ -61,7 +61,7 @@ double sum_mass2(double *p1, double *p2, double *p3) {
     sum(p1, p2, p3, P);
     return sp(P);
 }
-    double const PI = acos(-1), TWO_PI=2*PI;
+double const PI = acos(-1), TWO_PI = 2 * PI;
 
 void test_2body(int nEv) {
     const int nOut = 2;
@@ -72,12 +72,12 @@ void test_2body(int nEv) {
     double sum = 0;
     for (int iEv = 0; iEv < nEv; ++iEv) {
         double wt = ram2_(mmu, XM, p1, p2);
-        wt *= pow(TWO_PI,4-3*nOut);
+        wt *= pow(TWO_PI, 4 - 3 * nOut);
         sum += wt;
     };
     sum /= nEv;
-    cout<<" sum="<<sum<<" vs "<<1./(8*PI)<<endl;
-    
+    cout << " sum=" << sum << " vs " << 1. / (8 * PI) << endl;
+
 }
 
 void test_3body(int nEv) {
@@ -89,11 +89,59 @@ void test_3body(int nEv) {
     double sum = 0;
     for (int iEv = 0; iEv < nEv; ++iEv) {
         double wt = ram3_(mmu, XM, p1, p2, p3);
-        wt *= pow(TWO_PI,4-3*nOut);
+        wt *= pow(TWO_PI, 4 - 3 * nOut);
         sum += wt;
     };
     sum /= nEv;
-    cout<<" sum="<<sum<<endl;
+    cout << " sum=" << sum << endl;
+}
+
+double const mmu = 0.10565837,  Mpsi = 3.0969160;
+double const Mchi0=3.4147501, Mchi1=3.5106599, Mchi2=3.5562000;
+
+double matr2_0(double pPsi[4], double k1[4], double k2[4]) {
+    double q2 = sum_mass2(k1, k2);
+    double m2PsiK1 = sum_mass2(pPsi, k1);
+    double alpha = 1. / 137;
+    double const Mchi=Mchi0;
+    return 16 * alpha * PI * pow(q2, -2)*(pow(Mchi, 4)*(q2 + 2 * pow(mmu, 2)) + 2 * q2 * pow(mmu, 4) -
+            2 * pow(Mchi, 2)*(q2 * (m2PsiK1 + q2) + pow(mmu, 2)*(q2 + 2 * pow(Mpsi, 2))) +
+            2 * pow(mmu, 2)*(-2 * m2PsiK1 * q2 + 3 * q2 * pow(Mpsi, 2) + pow(Mpsi, 4)) + q2 * (2 * pow(m2PsiK1, 2) -
+            2 * m2PsiK1 * (-q2 + pow(Mpsi, 2)) + pow(q2 + pow(Mpsi, 2), 2))) *
+            pow(q2 - pow(Mchi, 2) + pow(Mpsi, 2), -2);
+}
+
+double matr2_1(double pPsi[4], double k1[4], double k2[4]) {
+    double q2 = sum_mass2(k1, k2);
+    double m2PsiK1 = sum_mass2(pPsi, k1);
+    double alpha = 1. / 137;
+    double const Mchi=Mchi1;
+    return 4 * alpha * PI * pow(Mchi, -2) * pow(Mpsi, -2) * pow(q2, -2)*(pow(Mchi, 6)*(q2 + 2 * pow(mmu, 2)) -
+            pow(Mchi, 4)*(q2 * (2 * m2PsiK1 + 2 * q2 - pow(Mpsi, 2)) + 2 * pow(mmu, 2)*(q2 + pow(Mpsi, 2))) +
+            pow(Mchi, 2)*(2 * q2 * pow(mmu, 4) - 2 * pow(mmu, 2)*(2 * m2PsiK1 * q2 - 6 * q2 * pow(Mpsi, 2) + pow(Mpsi, 4)) +
+            q2 * (2 * m2PsiK1 * q2 + 2 * pow(m2PsiK1, 2) - 4 * m2PsiK1 * pow(Mpsi, 2) + 4 * q2 * pow(Mpsi, 2) + pow(Mpsi, 4) + pow(q2, 2))) +
+            pow(Mpsi, 2)*(2 * q2 * pow(mmu, 4) + 2 * pow(mmu, 2)*(-2 * m2PsiK1 * q2 - q2 * pow(Mpsi, 2) + pow(Mpsi, 4)) +
+            q2 * (2 * pow(m2PsiK1, 2) - 2 * m2PsiK1 * (-q2 + pow(Mpsi, 2)) + pow(-q2 + pow(Mpsi, 2), 2))));
+}
+
+double matr2_2(double pPsi[4], double k1[4], double k2[4]) {
+    double q2 = sum_mass2(k1, k2);
+    double m2PsiK1 = sum_mass2(pPsi, k1);
+    double alpha = 1. / 137;
+    double const Mchi=Mchi2;
+    return (alpha * PI * pow(Mchi, -4) * pow(Mpsi, -2) * pow(q2, -2)*(3 * pow(Mchi, 10)*(q2 + 2 * pow(mmu, 2)) +
+            2 * pow(Mchi, 8)*(q2 * (-3 * m2PsiK1 - 6 * q2 + 17 * pow(Mpsi, 2)) + pow(mmu, 2)*(-9 * q2 + 28 * pow(Mpsi, 2))) +
+            2 * pow(Mchi, 6)*(3 * q2 * pow(mmu, 4) - pow(mmu, 2)*(6 * m2PsiK1 * q2 + 19 * q2 * pow(Mpsi, 2) + 62 * pow(Mpsi, 4) - 5 * pow(q2, 2)) +
+            q2 * (13 * m2PsiK1 * q2 + 3 * pow(m2PsiK1, 2) - 37 * m2PsiK1 * pow(Mpsi, 2) - 38 * q2 * pow(Mpsi, 2) + 3 * pow(Mpsi, 4) + 9 * pow(q2, 2))) +
+            2 * pow(Mchi, 4)*(2 * q2 * pow(mmu, 4)*(-5 * q2 + 17 * pow(Mpsi, 2)) + pow(mmu, 2)*
+            (-2 * q2 * (34 * m2PsiK1 + 29 * q2) * pow(Mpsi, 2) + 105 * q2 * pow(Mpsi, 4) + 28 * pow(Mpsi, 6) + (20 * m2PsiK1 + 9 * q2) * pow(q2, 2)) +
+            q2 * (2 * pow(m2PsiK1, 2)*(-5 * q2 + 17 * pow(Mpsi, 2)) - 8 * q2 * pow(Mpsi, 4) + 17 * pow(Mpsi, 6) + m2PsiK1 * (86 * q2 * pow(Mpsi, 2) - 37 * pow(Mpsi, 4) - 21 * pow(q2, 2)) +
+            25 * pow(Mpsi, 2) * pow(q2, 2) - 6 * pow(q2, 3))) - 8 * (m2PsiK1 - pow(mmu, 2))*(m2PsiK1 + q2 - pow(mmu, 2) - pow(Mpsi, 2)) * pow(q2, 2) * pow(-q2 + pow(Mpsi, 2), 2) +
+            pow(Mchi, 2)*(2 * q2 * pow(mmu, 4)*(-42 * q2 * pow(Mpsi, 2) + 3 * pow(Mpsi, 4) + 11 * pow(q2, 2)) +
+            2 * pow(mmu, 2)*(-(q2 * (6 * m2PsiK1 + 55 * q2) * pow(Mpsi, 4)) + 3 * q2 * pow(Mpsi, 6) + 3 * pow(Mpsi, 8) + (84 * m2PsiK1 + 61 * q2) * pow(Mpsi, 2) * pow(q2, 2) -
+            2 * (11 * m2PsiK1 + 6 * q2) * pow(q2, 3)) + q2 * (pow(m2PsiK1, 2)*(-84 * q2 * pow(Mpsi, 2) + 6 * pow(Mpsi, 4) + 22 * pow(q2, 2)) +
+            m2PsiK1 * (98 * q2 * pow(Mpsi, 4) - 6 * pow(Mpsi, 6) - 122 * pow(Mpsi, 2) * pow(q2, 2) + 30 * pow(q2, 3)) +
+            (-2 * q2 * pow(Mpsi, 2) + 3 * pow(Mpsi, 4) + 3 * pow(q2, 2)) * pow(-q2 + pow(Mpsi, 2), 2))))) / 3.;
 }
 
 int main(void) {
