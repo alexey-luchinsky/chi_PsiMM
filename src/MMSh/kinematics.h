@@ -8,6 +8,8 @@
 #ifndef KINEMATICS_H
 #define	KINEMATICS_H
 #include <iostream>
+#include "math.h"
+
 using namespace std;
 extern "C" {double rndm2_(double dummy);}
 void print_v4(double p[4]);
@@ -20,6 +22,8 @@ void sum(double *p1, double *p2, double *P);
 void sum(double *p1, double *p2, double *p3, double *P);
 double sum_mass2(double *p1, double *p2);
 double sum_mass2(double *p1, double *p2, double *p3);
+void apply_boost_to(double bx, double by, double bz, double (&answ)[4]);
+void apply_boost_to(double (&boost)[4], double (&answ)[4]);
 
 
 #endif	/* KINEMATICS_H */
