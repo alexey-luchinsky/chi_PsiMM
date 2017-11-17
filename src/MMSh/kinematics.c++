@@ -7,7 +7,7 @@ extern "C" {
 }
 
 void print_v4(double p[4]) {
-    cout << "{" << p[3] << "," << p[0] << "," << p[1] << "," << p[2] << "}";
+    cout << "{" << p[3] << "," << p[0] << "," << p[1] << "," << p[2] << "};";
 }
 
 void print_v4(string name, double p[4]) {

@@ -58,9 +58,12 @@ void test_chi0(int nEv) {
             println_v4("p",p);
             println_v4("k1",k1);
             println_v4("k2",k2);
-            cout<<" q2="<<q2<<endl;
-            cout<<" m2PsiK1="<<m2PsiK1<<endl;
-            cout<<" matr2="<<matr2<<endl;
+            cout<<" q2="<<q2<<";"<<endl;
+            cout<<" m2PsiK1="<<m2PsiK1<<";"<<endl;
+            cout<<" $$matr2="<<matr2<<";"<<endl;
+            cout<<"Print[sp[q]/q2];"<<endl;
+            cout<<"Print[sp[p + k1]/m2PsiK1];"<<endl;
+            cout<<"Print[$$matr2/$matr2];"<<endl;
         };
         tup.Fill(q2,m2PsiK1,matr2,wt);
         sum += wt*matr2;
