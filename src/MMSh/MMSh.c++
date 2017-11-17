@@ -53,12 +53,24 @@ void test_chi0(int nEv) {
         double matr2 = matr2_0(p, k1, k2);
         double q2 = sum_mass2(k1, k2);
         double m2PsiK1 = sum_mass2(p, k1);
+        if(iEv<10) {
+            cout<<"======== Debug print at iEv="<<iEv<<endl;
+            println_v4("p",p);
+            println_v4("k1",k1);
+            println_v4("k2",k2);
+            cout<<" q2="<<q2<<endl;
+            cout<<" m2PsiK1="<<m2PsiK1<<endl;
+            cout<<" matr2="<<matr2<<endl;
+        };
         tup.Fill(q2,m2PsiK1,matr2,wt);
         sum += wt*matr2;
     };
-    sum /= nEv;
+    cout<<"============="<<endl;
     tup.Write();
-    cout << "chi_c0: sum=" << sum << endl;
+    double gamma=sum/(2*Mchi0)/nEv;
+    double th=10.5e-3*1.26e-2*2.55e-4;
+    cout << "chi_c0: gamma=" << gamma << " vs theoretical "<<th<< endl;
+    cout<<"gamma/th="<<gamma/th<<endl;
 }
 
 void test_chi1(int nEv) {
@@ -102,9 +114,8 @@ void test_chi2(int nEv) {
         tup.Fill(q2,m2PsiK1,matr2,wt);
         sum += wt*matr2;
     };
-    sum /= nEv;
     tup.Write();
-    cout << "chi_c0: sum=" << sum << endl;
+    sum /= nEv;
 }
 
 
@@ -113,7 +124,7 @@ int main(void) {
     TFile file("matr2_chic0.root", "RECREATE");
     int nEv=1e6;
     test_chi0(nEv);
-    test_chi1(nEv);
-    test_chi2(nEv);
+//    test_chi1(nEv);
+//    test_chi2(nEv);
     file.Save();
 }
