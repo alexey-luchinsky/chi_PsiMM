@@ -22,11 +22,6 @@ double matr2_0(double pPsi[4], double k1[4], double k2[4]) {
             pow(Mpsi$2 + q2, 2))) * pow(-Mchi$2 + Mpsi$2 + q2, -2);
     matr2 *= g0$2;
     return matr2;
-    //    return 16 * alpha * PI * pow(q2, -2)*(pow(Mchi, 4)*(q2 + 2 * pow(mmu, 2)) + 2 * q2 * pow(mmu, 4) -
-    //            2 * pow(Mchi, 2)*(q2 * (m2PsiK1 + q2) + pow(mmu, 2)*(q2 + 2 * pow(Mpsi, 2))) +
-    //            2 * pow(mmu, 2)*(-2 * m2PsiK1 * q2 + 3 * q2 * pow(Mpsi, 2) + pow(Mpsi, 4)) + q2 * (2 * pow(m2PsiK1, 2) -
-    //            2 * m2PsiK1 * (-q2 + pow(Mpsi, 2)) + pow(q2 + pow(Mpsi, 2), 2))) *
-    //            pow(q2 - pow(Mchi, 2) + pow(Mpsi, 2), -2);
 }
 
 double _matr2LL_0(double kk1[4], double kk2[4], double k1[4], double k2[4]) {
@@ -39,10 +34,12 @@ double _matr2LL_0(double kk1[4], double kk2[4], double k1[4], double k2[4]) {
     double k2kk1=sp(k2,kk1);
     double k1kk1=sp(k1,kk1);
     double k2kk2=sp(k2,kk2);
+//    cout<<"mass(kk1,kk2)="<<sqrt(sum_mass2(kk1,kk2))<<endl;
     double matr2 = 64 * alpha * Mchi$2 * PI * (2 * k1kk2 * k2kk1 + 2 * k1kk1 * k2kk2 +
             mmu$2 * (Mpsi$2 + q2)) * pow(m2PsiK1, 2) * pow(m2PsiK1 + m2PsiK2 -
             2 * (mmu$2 + Mpsi$2), -2) * pow(q2, -2);
     matr2 /= ( pow(sum_mass2(kk1,kk2)-Mpsi$2,2) + gammaPsi$2);
+    matr2 /= 1.75636e+14;
     return matr2;
 }
 
