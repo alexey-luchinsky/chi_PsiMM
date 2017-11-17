@@ -51,7 +51,7 @@ void test_chi0(int nEv) {
         double matr2 = matr2_0(p, k1, k2);
         double q2 = sum_mass2(k1, k2);
         double m2PsiK1 = sum_mass2(p, k1);
-        if (iEv < 10) {
+        if (iEv < 0) {
             cout << "======== Debug print at iEv=" << iEv << endl;
             println_v4("p", p);
             println_v4("k1", k1);
@@ -69,7 +69,7 @@ void test_chi0(int nEv) {
     cout << "=============" << endl;
     tup.Write();
     double gamma = sum / (2 * Mchi0) / nEv;
-    double th = 10.5e-3 * 1.26e-2 * 2.55e-4;
+    double th = 10.5e-3 * 1.26e-2 * 2.97e-4;
     cout << "chi_c0: gamma=" << gamma << " vs theoretical " << th << endl;
     cout << "gamma/th=" << gamma / th << endl;
 }
