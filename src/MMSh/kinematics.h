@@ -11,7 +11,6 @@
 #include "math.h"
 
 using namespace std;
-extern "C" {double rndm2_(double dummy);}
 void print_v4(double p[4]);
 void print_v4(string name, double p[4]);
 void println_v4(double p[4]);

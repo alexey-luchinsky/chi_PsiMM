@@ -1,10 +1,4 @@
 #include "kinematics.h"
-extern "C" {
-    double rndm2_(double dummy) {
-        return ((double) rand() / (double) (RAND_MAX));
-    }
-
-}
 
 void print_v4(double p[4]) {
     cout << "{" << p[3] << "," << p[0] << "," << p[1] << "," << p[2] << "};";
