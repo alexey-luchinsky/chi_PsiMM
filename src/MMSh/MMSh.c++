@@ -133,7 +133,7 @@ void test_chi1(int nEv) {
     };
     cout << "=============" << endl;
     tup.Write();
-    double gamma = sum / ((2*1+1)*2 * Mchi0) / nEv;
+    double gamma = sum / ((2*1+1)*2 * Mchi1) / nEv;
     double th = 0.84e-3 * 33.9e-2 * 5.1e-4;
     cout << "chi_c1: gamma=" << gamma << " vs theoretical " << th << endl;
     cout << "gamma/th=" << gamma / th << endl;
