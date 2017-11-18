@@ -18,64 +18,6 @@ extern "C" {
 
 double const PI = acos(-1), TWO_PI = 2 * PI;
 
-void test_2body(int nEv) {
-    const int nOut = 2;
-    double mmu = 10;
-    double XM[nOut] = {0, 0};
-    double p1[4], p2[4];
-
-    double sum = 0;
-    for (int iEv = 0; iEv < nEv; ++iEv) {
-        double wt = ram2_(mmu, XM, p1, p2);
-        wt *= pow(TWO_PI, 4 - 3 * nOut);
-        sum += wt;
-    };
-    sum /= nEv;
-    cout << " sum=" << sum << " vs " << 1. / (8 * PI) << endl;
-
-}
-
-
-void test_chi1(int nEv) {
-    cout << "*********************** chi_c1 ***********************" << endl;
-    TNtuple tup("chic1", "chic1", "q2:m2PsiK1:matr2:wt");
-    double p[4], k1[4], k2[4];
-    const int nOut = 3;
-    double XM[nOut] = {Mpsi, mmu, mmu};
-    double sum = 0;
-    for (int iEv = 0; iEv < nEv; ++iEv) {
-        if (iEv % (nEv / 10) == 0) {
-            cout << "========= " << (int) (100. * iEv / nEv) << " % ==========" << endl;
-        };
-        double wt = ram3_(Mchi1, XM, p, k1, k2);
-        wt *= pow(TWO_PI, 4 - 3 * nOut);
-        double matr2 = matr2_1(p, k1, k2);
-        double q2 = sum_mass2(k1, k2);
-        double m2PsiK1 = sum_mass2(p, k1);
-        if (iEv < 10) {
-            cout << "======== Debug print at iEv=" << iEv << endl;
-            println_v4("p", p);
-            println_v4("k1", k1);
-            println_v4("k2", k2);
-            cout << " q2=" << q2 << ";" << endl;
-            cout << " m2PsiK1=" << m2PsiK1 << ";" << endl;
-            cout << " $$matr2=" << matr2 << ";" << endl;
-            cout << "Print[sp[q]/q2];" << endl;
-            cout << "Print[sp[p + k1]/m2PsiK1];" << endl;
-            cout << "Print[$$matr2/$matr2];" << endl;
-        };
-        tup.Fill(q2, m2PsiK1, matr2, wt);
-        sum += wt*matr2;
-    };
-    cout << "=============" << endl;
-    tup.Write();
-    double gamma = sum / ((2 * 1 + 1)*2 * Mchi1) / nEv;
-    double th = 0.84e-3 * 33.9e-2 * 5.1e-4 * 2.592;
-    cout << "chi_c1: gamma=" << gamma << " vs theoretical " << th << endl;
-    cout << "gamma/th=" << gamma / th << endl;
-
-}
-
 string to_str(int i) {
     char buffer[100];
     sprintf(buffer, "%d", i);
@@ -83,7 +25,7 @@ string to_str(int i) {
 };
 
 void test_chiJ(int J, int nEv, int iDebug = 0) {
-    cout << "*********************** chi_c2 ***********************" << endl;
+    cout << "*********************** chi_c"<<J<<" ***********************" << endl;
     double chi_masses[3] = {Mchi0, Mchi1, Mchi2};
     double theory[3] = {3.95316e-8, 3.77115e-7, 2.705e-7};
     if (J < 0 || J > 2) {
