@@ -38,27 +38,6 @@ void test_2body(int nEv) {
 
 
 
-void test_chi2(int nEv) {
-    cout << "*********************** chi_c2 ***********************" << endl;
-    TNtuple tup("chic2", "chic2", "q2:m2PsiK1:matr2:wt");
-    double p[4], k1[4], k2[4];
-    const int nOut = 3;
-    double XM[nOut] = {Mpsi, mmu, mmu};
-    double sum = 0;
-    for (int iEv = 0; iEv < nEv; ++iEv) {
-        if (iEv % (nEv / 10) == 0) {
-            cout << "========= " << (int) (100. * iEv / nEv) << " % ==========" << endl;
-        };
-        double wt = ram3_(Mchi2, XM, p, k1, k2);
-        double matr2 = matr2_2(p, k1, k2);
-        double q2 = sum_mass2(k1, k2);
-        double m2PsiK1 = sum_mass2(p, k1);
-        tup.Fill(q2, m2PsiK1, matr2, wt);
-        sum += wt*matr2;
-    };
-    tup.Write();
-    sum /= nEv;
-}
 
 void test_chi0(int nEv) {
     cout << "*********************** chi_c0 ***********************" << endl;
@@ -140,12 +119,52 @@ void test_chi1(int nEv) {
 
 }
 
+void test_chi2(int nEv) {
+    cout << "*********************** chi_c2 ***********************" << endl;
+    TNtuple tup("chic2", "chic2", "q2:m2PsiK1:matr2:wt");
+    double p[4], k1[4], k2[4];
+    const int nOut = 3;
+    double XM[nOut] = {Mpsi, mmu, mmu};
+    double sum = 0;
+    for (int iEv = 0; iEv < nEv; ++iEv) {
+        if (iEv % (nEv / 10) == 0) {
+            cout << "========= " << (int) (100. * iEv / nEv) << " % ==========" << endl;
+        };
+        double wt = ram3_(Mchi2, XM, p, k1, k2);
+        wt *= pow(TWO_PI, 4 - 3 * nOut);
+        double matr2 = matr2_2(p, k1, k2);
+        double q2 = sum_mass2(k1, k2);
+        double m2PsiK1 = sum_mass2(p, k1);
+        if (iEv < 10) {
+            cout << "======== Debug print at iEv=" << iEv << endl;
+            println_v4("p", p);
+            println_v4("k1", k1);
+            println_v4("k2", k2);
+            cout << " q2=" << q2 << ";" << endl;
+            cout << " m2PsiK1=" << m2PsiK1 << ";" << endl;
+            cout << " $$matr2=" << matr2 << ";" << endl;
+            cout << "Print[sp[q]/q2];" << endl;
+            cout << "Print[sp[p + k1]/m2PsiK1];" << endl;
+            cout << "Print[$$matr2/$matr2];" << endl;
+        };
+        tup.Fill(q2, m2PsiK1, matr2, wt);
+        sum += wt*matr2;
+    };
+    cout << "=============" << endl;
+    tup.Write();
+    double gamma = sum / ((2*2+1)*2 * Mchi2) / nEv;
+    double th = 0.84e-3 * 33.9e-2 * 5.1e-4*2.592;
+    cout << "chi_c1: gamma=" << gamma << " vs theoretical " << th << endl;
+    cout << "gamma/th=" << gamma / th << endl;
+
+}
+
 
 int main(void) {
     //    test_2body(1e4);
     TFile file("matr2_chic0.root", "RECREATE");
     int nEv = 1e6;
-    test_chi1(nEv);
+    test_chi2(nEv);
 //    test_chi0_LL(nEv);
     //    test_chi1(nEv);
     //    test_chi2(nEv);
