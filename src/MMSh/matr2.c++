@@ -42,8 +42,8 @@ double matr2_2(double pPsi[4], double k1[4], double k2[4]) {
     double q2 = sum_mass2(k1, k2);
     double m2PsiK1 = sum_mass2(pPsi, k1);
     double const Mchi = Mchi2, Mchi$2 = pow(Mchi, 2), Mchi$4 = pow(Mchi, 4), Mchi$6 = pow(Mchi, 6);
-    double matr2=(alpha*PI*pow(g2,2)*pow(Mchi,-6)*pow(Mpsi,-2)*pow(q2,-2)*(2*(mmu$2*(28*Mpsi$2 - 9*q2) + (-3*m2PsiK1 + 17*Mpsi$2 - 6*q2)*q2)*pow(Mchi,8) + 
-       3*(2*mmu$2 + q2)*pow(Mchi,10) - 8*(m2PsiK1 - mmu$2)*(m2PsiK1 - mmu$2 - Mpsi$2 + q2)*pow(Mpsi$2 - q2,2)*pow(q2,2) + 
+    double matr2=(alpha*PI*pow(Mchi,-6)*pow(Mpsi,-2)*pow(q2,-2)*(2*(mmu$2*(28*Mpsi$2 - 9*q2) + (-3*m2PsiK1 + 17*Mpsi$2 - 6*q2)*q2)*pow(Mchi,8) + 3*(2*mmu$2 + q2)*pow(Mchi,10) - 
+       8*(m2PsiK1 - mmu$2)*(m2PsiK1 - mmu$2 - Mpsi$2 + q2)*pow(Mpsi$2 - q2,2)*pow(q2,2) + 
        2*Mchi$6*(3*mmu$4*q2 - mmu$2*(62*Mpsi$4 + 6*m2PsiK1*q2 + 19*Mpsi$2*q2 - 5*pow(q2,2)) + 
           q2*(-37*m2PsiK1*Mpsi$2 + 3*Mpsi$4 + 13*m2PsiK1*q2 - 38*Mpsi$2*q2 + 3*pow(m2PsiK1,2) + 9*pow(q2,2))) + 
        2*Mchi$4*(2*mmu$4*(17*Mpsi$2 - 5*q2)*q2 + mmu$2*(105*Mpsi$4*q2 - 2*Mpsi$2*q2*(34*m2PsiK1 + 29*q2) + 28*pow(Mpsi,6) + (20*m2PsiK1 + 9*q2)*pow(q2,2)) + 
