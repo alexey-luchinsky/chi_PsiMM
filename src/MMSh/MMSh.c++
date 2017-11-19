@@ -33,6 +33,7 @@ string to_str(int i) {
 double chi_masses[3] = {Mchi0, Mchi1, Mchi2};
 double chi_widths[3] = {10.5e-3, 0.84e-3, 1.93e-3};
 double brs_gamma[3] =  {1.27e-2, 33.9e-2, 19.2e-2};
+double br_mm[3] =      { 2.2e-4,  5.1e-4,  6.4e-4};
 
 void test_chiJ(int J, int nEv, int iDebug = 0) {
     cout << "*********************** chi_c" << J << " ***********************" << endl;
@@ -82,8 +83,10 @@ void test_chiJ(int J, int nEv, int iDebug = 0) {
     tup.Write();
     double gamma = sum / ((2 * J + 1)*2 * _Mchi) / nEv;
     double th = theory[J];
+    double th_paper=chi_widths[J]*brs_gamma[J]*br_mm[J];
     cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
     cout << "gamma/th=" << gamma / th << endl;
+    cout << "gamma/th_paper=" << gamma / th_paper << endl;
 
 
 }
@@ -114,12 +117,14 @@ int main(void) {
     //    test_2body(1e4);
     TFile file("matr2_chic.root", "RECREATE");
     int nEv = 1e6;
-    test_chiGammaJ(0,nEv);
-    test_chiGammaJ(1,nEv);
-    test_chiGammaJ(2,nEv);
-//    test_chiJ(0, nEv);
-//    test_chiJ(1, nEv);
-//    test_chiJ(2, nEv);
+//    test_chiGammaJ(0,nEv);
+//    test_chiGammaJ(1,nEv);
+//    test_chiGammaJ(2,nEv);
+    
+    test_chiJ(0, nEv);
+    test_chiJ(1, nEv);
+    test_chiJ(2, nEv);
+
     file.Save();
 }
 
