@@ -15,7 +15,8 @@ extern "C" {
     double ram5_(double &ecm, double *xm, double *p1, double *p2, double *p3, double *p4, double *p5);
 }
 
-extern "C" {double rndm2_(double dummy) {
+extern "C" {
+double rndm2_(double dummy) {
         return ((double) rand() / (double) (RAND_MAX));
     }
 }
@@ -29,9 +30,12 @@ string to_str(int i) {
     return buffer;
 };
 
+double chi_masses[3] = {Mchi0, Mchi1, Mchi2};
+double chi_widths[3] = {10.5e-3, 0.84e-3, 1.93e-3};
+double brs_gamma[3] =  {1.27e-2, 33.9e-2, 19.2e-2};
+
 void test_chiJ(int J, int nEv, int iDebug = 0) {
-    cout << "*********************** chi_c"<<J<<" ***********************" << endl;
-    double chi_masses[3] = {Mchi0, Mchi1, Mchi2};
+    cout << "*********************** chi_c" << J << " ***********************" << endl;
     double theory[3] = {3.95316e-8, 3.77115e-7, 2.705e-7};
     if (J < 0 || J > 2) {
         cout << "Wrong spin J=" << J << endl;
@@ -84,13 +88,38 @@ void test_chiJ(int J, int nEv, int iDebug = 0) {
 
 }
 
+void test_chiGammaJ(int J, int nEv) {
+    double pPsi[4], k[4];
+    const int nOut = 2;
+    double XM[nOut] = {Mpsi, 0};
+    double sum = 0;
+    double _Mchi = chi_masses[J];
+    for (int iEv = 0; iEv < nEv; ++iEv) {
+        double wt = ram2_(_Mchi, XM, pPsi, k);
+        wt *= pow(TWO_PI, 4 - 3 * nOut);
+        double matr2;
+        if(J==0) matr2=matr2gamma_0(pPsi,k);
+        else if(J==1) matr2=matr2gamma_1(pPsi,k);
+        else if(J==2) matr2=matr2gamma_2(pPsi,k);
+        sum += wt*matr2;
+    };
+    double gamma = sum / ((2 * J + 1)*2 * _Mchi) / nEv;
+    double theory = chi_widths[J]*brs_gamma[J];
+//    cout<<"gamma="<<gamma<<endl;
+    cout<<"chi_c"<<J<<"-> psi gamma: gamma/theory="<<gamma/theory<<endl;
+
+}
+
 int main(void) {
     //    test_2body(1e4);
     TFile file("matr2_chic.root", "RECREATE");
     int nEv = 1e6;
-    test_chiJ(0, nEv);
-    test_chiJ(1, nEv);
-    test_chiJ(2, nEv);
+    test_chiGammaJ(0,nEv);
+    test_chiGammaJ(1,nEv);
+    test_chiGammaJ(2,nEv);
+//    test_chiJ(0, nEv);
+//    test_chiJ(1, nEv);
+//    test_chiJ(2, nEv);
     file.Save();
 }
 
