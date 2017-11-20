@@ -60,3 +60,6 @@ add_executable(MMSh.exe src/MMSh/MMSh.c++ src/MMSh/rambo_.for src/MMSh/kinematic
 target_link_libraries(MMSh.exe ${ROOT_LIBRARIES})
 #target_link_libraries(MMSh.exe ${HepMC_LIBRARY_DIR}/libHepMC.a)
 SET_TARGET_PROPERTIES(MMSh.exe  PROPERTIES LINK_FLAGS -lgfortran)
+
+# adding sources to gen_pol
+add_executable(gen_pol.exe src/matr2_pol/gen_pol.cc)
