@@ -63,3 +63,4 @@ SET_TARGET_PROPERTIES(MMSh.exe  PROPERTIES LINK_FLAGS -lgfortran)
 
 # adding sources to gen_pol
 add_executable(gen_pol.exe src/matr2_pol/gen_pol.cc)
+target_link_libraries(gen_pol.exe ${ROOT_LIBRARIES} ${EVTGEN_LIBRARY_DIR}/archive/libEvtGen.a)
