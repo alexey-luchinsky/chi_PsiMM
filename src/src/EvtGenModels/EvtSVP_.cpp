@@ -74,7 +74,7 @@ void EvtSVP_::decay_3body(EvtParticle* root) {
             k = k1 + k2; // photon momentum
 
     double kSq = k*k;
-    if (kSq < 1e-10) {
+    if (kSq < 1e-4) {
         return;
     }
     double kp = k*p;
@@ -136,7 +136,7 @@ void EvtSVP_::initProbMax() {
             setProbMax(150); // tested on 1e6 events
         }
         if (getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
-            setProbMax(8e3); // tested on 1e6 events
+            setProbMax(5e4); // tested on 1e6 events
         }
     };
 }
