@@ -39,8 +39,12 @@ void write_histogram_to_file(TH1F &histogram, string file_name) {
     file.close();
 }
 
-void write_tuple_to_file(TNtuple tup, string var, string file_name) {
-    
+void write_tuple_to_file(TNtuple *tup, string var, string file_name, int nBins=30) {
+    double _min=tup->GetMinimum(var.c_str()), _max=tup->GetMaximum(var.c_str());
+    TH1F *h=new TH1F("h","h",nBins, _min, _max);
+    tup->Project("h",var.c_str(),"matr2*wt");
+    write_histogram_to_file(*h,file_name);
+    h->Delete();
 }
 
 double const PI = acos(-1), TWO_PI = 2 * PI;
@@ -130,8 +134,8 @@ void test_chiJ(int J, int nEv, int iDebug = 0) {
     cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
     cout << "gamma/th=" << gamma / th << endl;
     cout << "gamma/th_paper=" << gamma / th_paper << endl;
-
-
+    write_tuple_to_file(&tup,"q2","hQ2_chi"+strJ+"_matr2.hst");
+    write_tuple_to_file(&tup,"m2PsiK1","hm2PsiK1_chi"+strJ+"_matr2.hst");
 }
 
 void test_chiJ_psi(int J, int nEv, int iDebug=0) {
@@ -197,6 +201,10 @@ void test_chiJ_psi(int J, int nEv, int iDebug=0) {
 //    cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
 //    cout << "gamma/th=" << gamma / th << endl;
 //    cout << "gamma/th_paper=" << gamma / th_paper << endl;
+    write_tuple_to_file(&tup,"q2","hQ2_chi"+strJ+"_matr2_psi.hst");
+    write_tuple_to_file(&tup,"m2PsiK1","hm2PsiK1_chi"+strJ+"_matr2_psi.hst");
+    write_tuple_to_file(&tup,"m2K1KK1","hm2K1KK1_chi"+strJ+"_matr2_psi.hst");
+
 }
 
 int main(void) {
