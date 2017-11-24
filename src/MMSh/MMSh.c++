@@ -1,7 +1,11 @@
 #include <iostream>
+#include <iomanip>
+#include <fstream>
 
 #include "TFile.h"
 #include "TNtuple.h"
+#include "TH1F.h"
+
 #include "kinematics.h"
 #include "matr2.h"
 
@@ -22,6 +26,22 @@ extern "C" {
     }
 }
 
+void write_histogram_to_file(TH1F &histogram, string file_name) {
+    const char *__file_name__ = file_name.c_str();
+    remove(__file_name__);
+    ofstream file;
+    cout << "Extporting histogram " << file_name << endl;
+    file.open(__file_name__);
+    for (int i = 1; i <= histogram.GetNbinsX(); i++)
+        file << setiosflags(ios::scientific) << histogram.GetBinCenter(i) <<
+        " " << setiosflags(ios::scientific) << histogram.GetBinContent(i) / histogram.GetBinWidth(i) <<
+        " " << setiosflags(ios::scientific) << histogram.GetBinError(i) / histogram.GetBinWidth(i) << endl;
+    file.close();
+}
+
+void write_tuple_to_file(TNtuple tup, string var, string file_name) {
+    
+}
 
 double const PI = acos(-1), TWO_PI = 2 * PI;
 
@@ -142,7 +162,7 @@ void test_chiJ_psi(int J, int nEv, int iDebug=0) {
         apply_boost_to(p,kk2);
         
         double matr2;
-        if (J == 0) matr2 = matr2_0(p, k1, k2);
+        if (J == 0) matr2 = matr2_0(kk1,kk2,k1,k2);
         else if (J == 1) matr2 = matr2_1(p, k1, k2);
         else if (J == 2) matr2 = matr2_2(p, k1, k2);
 
@@ -174,9 +194,9 @@ void test_chiJ_psi(int J, int nEv, int iDebug=0) {
     double gamma = sum / ((2 * J + 1)*2 * _Mchi) / nEv;
     double th = theory[J];
     double th_paper = chi_widths[J] * brs_gamma[J] * br_mm[J];
-    cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
-    cout << "gamma/th=" << gamma / th << endl;
-    cout << "gamma/th_paper=" << gamma / th_paper << endl;
+//    cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
+//    cout << "gamma/th=" << gamma / th << endl;
+//    cout << "gamma/th_paper=" << gamma / th_paper << endl;
 }
 
 int main(void) {
@@ -185,6 +205,7 @@ int main(void) {
     int nEv = 1e6;
 
     test_chiJ_psi(0, nEv,10);
+    test_chiJ(0,nEv);
     //    test_chiGammaJ(0,nEv);
     //    test_chiGammaJ(1,nEv);
     //    test_chiGammaJ(2,nEv);

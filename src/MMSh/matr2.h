@@ -13,6 +13,8 @@ extern double const PI;
 
 double matr2_0(double pPsi[4], double k1[4], double k2[4]);
 double matr2gamma_0(double pPsi[4], double k[4]);
+double matr2_0_mm(double kk1[4], double kk2[4], double k1[4], double k2[4]);
+double matr2_0(double kk1[4], double kk2[4], double k1[4], double k2[4]);
 
 double matr2_1(double pPsi[4], double k1[4], double k2[4]);
 double matr2gamma_1(double pPsi[4], double k[4]);
