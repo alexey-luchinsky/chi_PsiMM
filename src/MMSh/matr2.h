@@ -23,6 +23,8 @@ double matr2_1(double kk1[4], double kk2[4], double k1[4], double k2[4]);
 
 double matr2_2(double pPsi[4], double k1[4], double k2[4]);
 double matr2gamma_2(double pPsi[4], double k[4]);
+double matr2_2_mm(double kk1[4], double kk2[4], double k1[4], double k2[4]);
+double matr2_2(double kk1[4], double kk2[4], double k1[4], double k2[4]);
 
 #endif	/* MATR2_H */
 

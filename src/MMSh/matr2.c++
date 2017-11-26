@@ -172,3 +172,130 @@ double matr2gamma_2(double pPsi[4], double k[4]) {
     double Mchi = Mchi2, Mchi$2 = pow(Mchi, 2), Mchi$4 = pow(Mchi, 4);
     return g2$2 * ((3 * Mchi$4 + 34 * Mchi$2 * Mpsi$2 + 3 * Mpsi$4) * pow(Mchi, -4) * pow(Mpsi, -2) * pow(Mchi$2 - Mpsi$2, 2)) / 48.;
 }
+
+// ======== chi_c2 -> psi mu mu -> mu(kk1) mu(kk2) mu(k1) mu(k2)
+double matr2_2_mm(double kk1[4], double kk2[4], double k1[4], double k2[4]) {
+    double Mchi=Mchi2, Mchi$2=pow(Mchi,2), Mchi$4=pow(Mchi,4), Mchi$6=pow(Mchi,6);
+    double p[4], P[4]; sum(kk1,kk2,p); sum(p,k1,k2,P);
+    double m2PsiK1=sum_mass2(p,k1), m2PsiK2=sum_mass2(p,k2), q2=sum_mass2(k1,k2);
+    double k2kk1=sp(k2,kk1),  //
+            k2kk2=sp(k2,kk2), //
+            kk1kk2=sp(kk1,kk2), //
+            kk1p=sp(kk1,p), kk2p=sp(kk2,p), k1kk2=sp(k1,kk2),
+            k1kk1=sp(k1,kk1),
+            kk1P=sp(kk1,P), kk2P=sp(kk2,P);
+    
+
+    double matr2=
+(-8*alpha*PI*pow(Mchi,-6)*pow(q2,-2)*(2*k2kk2*kk1P*m2PsiK1*m2PsiK2*Mchi$4 + 2*k2kk1*kk2P*m2PsiK1*m2PsiK2*Mchi$4 - 8*kk1P*kk2P*m2PsiK1*m2PsiK2*Mchi$4 - 
+       4*kk1kk2*m2PsiK1*m2PsiK2*Mchi$6 + 4*k2kk2*kk1P*m2PsiK1*m2PsiK2*Mchi$2*mmu$2 + 4*k2kk1*kk2P*m2PsiK1*m2PsiK2*Mchi$2*mmu$2 - 
+       56*kk1P*kk2P*m2PsiK1*m2PsiK2*Mchi$2*mmu$2 - 8*k2kk1*k2kk2*m2PsiK1*Mchi$4*mmu$2 + 2*k2kk2*kk1P*m2PsiK1*Mchi$4*mmu$2 + 2*k2kk1*kk2P*m2PsiK1*Mchi$4*mmu$2 - 
+       2*k2kk2*kk1P*m2PsiK2*Mchi$4*mmu$2 - 2*k2kk1*kk2P*m2PsiK2*Mchi$4*mmu$2 - 32*kk1kk2*m2PsiK1*m2PsiK2*Mchi$4*mmu$2 - 10*m2PsiK1*m2PsiK2*Mchi$6*mmu$2 - 
+       32*kk1P*kk2P*m2PsiK1*m2PsiK2*mmu$4 + 4*k2kk2*kk1P*m2PsiK1*Mchi$2*mmu$4 + 4*k2kk1*kk2P*m2PsiK1*Mchi$2*mmu$4 + 48*kk1P*kk2P*m2PsiK1*Mchi$2*mmu$4 - 
+       4*k2kk2*kk1P*m2PsiK2*Mchi$2*mmu$4 - 4*k2kk1*kk2P*m2PsiK2*Mchi$2*mmu$4 + 48*kk1P*kk2P*m2PsiK2*Mchi$2*mmu$4 - 16*kk1kk2*m2PsiK1*m2PsiK2*Mchi$2*mmu$4 + 
+       4*k2kk1*k2kk2*Mchi$4*mmu$4 + 32*kk1kk2*m2PsiK1*Mchi$4*mmu$4 + 32*kk1kk2*m2PsiK2*Mchi$4*mmu$4 - 80*m2PsiK1*m2PsiK2*Mchi$4*mmu$4 + 
+       2*k2kk2*kk1P*m2PsiK1*m2PsiK2*Mchi$2*Mpsi$2 + 2*k2kk1*kk2P*m2PsiK1*m2PsiK2*Mchi$2*Mpsi$2 - 16*kk1P*kk2P*m2PsiK1*m2PsiK2*Mchi$2*Mpsi$2 - 
+       8*k2kk1*k2kk2*m2PsiK1*Mchi$4*Mpsi$2 + 2*k2kk2*kk1P*m2PsiK1*Mchi$4*Mpsi$2 + 2*k2kk1*kk2P*m2PsiK1*Mchi$4*Mpsi$2 - 2*k2kk2*kk1P*m2PsiK2*Mchi$4*Mpsi$2 - 
+       2*k2kk1*kk2P*m2PsiK2*Mchi$4*Mpsi$2 - 8*kk1kk2*m2PsiK1*m2PsiK2*Mchi$4*Mpsi$2 - 32*kk1P*kk2P*m2PsiK1*m2PsiK2*mmu$2*Mpsi$2 + 
+       6*k2kk2*kk1P*m2PsiK1*Mchi$2*mmu$2*Mpsi$2 + 6*k2kk1*kk2P*m2PsiK1*Mchi$2*mmu$2*Mpsi$2 + 48*kk1P*kk2P*m2PsiK1*Mchi$2*mmu$2*Mpsi$2 - 
+       6*k2kk2*kk1P*m2PsiK2*Mchi$2*mmu$2*Mpsi$2 - 6*k2kk1*kk2P*m2PsiK2*Mchi$2*mmu$2*Mpsi$2 + 48*kk1P*kk2P*m2PsiK2*Mchi$2*mmu$2*Mpsi$2 - 
+       16*kk1kk2*m2PsiK1*m2PsiK2*Mchi$2*mmu$2*Mpsi$2 + 8*k2kk1*k2kk2*Mchi$4*mmu$2*Mpsi$2 + 32*kk1kk2*m2PsiK1*Mchi$4*mmu$2*Mpsi$2 + 
+       32*kk1kk2*m2PsiK2*Mchi$4*mmu$2*Mpsi$2 - 20*m2PsiK1*m2PsiK2*Mchi$4*mmu$2*Mpsi$2 - 96*kk1P*kk2P*Mchi$2*mmu$4*Mpsi$2 - 40*m2PsiK1*m2PsiK2*Mchi$2*mmu$4*Mpsi$2 - 
+       64*kk1kk2*Mchi$4*mmu$4*Mpsi$2 + 80*m2PsiK1*Mchi$4*mmu$4*Mpsi$2 + 80*m2PsiK2*Mchi$4*mmu$4*Mpsi$2 - 8*kk1P*kk2P*m2PsiK1*m2PsiK2*Mpsi$4 + 
+       2*k2kk2*kk1P*m2PsiK1*Mchi$2*Mpsi$4 + 2*k2kk1*kk2P*m2PsiK1*Mchi$2*Mpsi$4 - 2*k2kk2*kk1P*m2PsiK2*Mchi$2*Mpsi$4 - 2*k2kk1*kk2P*m2PsiK2*Mchi$2*Mpsi$4 - 
+       4*kk1kk2*m2PsiK1*m2PsiK2*Mchi$2*Mpsi$4 + 4*k2kk1*k2kk2*Mchi$4*Mpsi$4 - 48*kk1P*kk2P*Mchi$2*mmu$2*Mpsi$4 - 10*m2PsiK1*m2PsiK2*Mchi$2*mmu$2*Mpsi$4 - 
+       32*kk1kk2*Mchi$4*mmu$2*Mpsi$4 - 80*Mchi$4*mmu$4*Mpsi$4 - 2*kk1P*kk2p*m2PsiK1*m2PsiK2*Mchi$2*q2 - 2*kk1p*kk2P*m2PsiK1*m2PsiK2*Mchi$2*q2 + 
+       12*kk1P*kk2P*m2PsiK1*m2PsiK2*Mchi$2*q2 - 2*k2kk2*kk1p*m2PsiK1*Mchi$4*q2 + k2kk2*kk1P*m2PsiK1*Mchi$4*q2 - 2*k2kk1*kk2p*m2PsiK1*Mchi$4*q2 + 
+       2*kk1P*kk2p*m2PsiK1*Mchi$4*q2 + k2kk1*kk2P*m2PsiK1*Mchi$4*q2 + 2*kk1p*kk2P*m2PsiK1*Mchi$4*q2 - 8*kk1P*kk2P*m2PsiK1*Mchi$4*q2 - 2*k2kk2*kk1p*m2PsiK2*Mchi$4*q2 + 
+       k2kk2*kk1P*m2PsiK2*Mchi$4*q2 - 2*k2kk1*kk2p*m2PsiK2*Mchi$4*q2 + 2*kk1P*kk2p*m2PsiK2*Mchi$4*q2 + k2kk1*kk2P*m2PsiK2*Mchi$4*q2 + 2*kk1p*kk2P*m2PsiK2*Mchi$4*q2 - 
+       8*kk1P*kk2P*m2PsiK2*Mchi$4*q2 + 10*kk1kk2*m2PsiK1*m2PsiK2*Mchi$4*q2 - 4*kk1kk2*m2PsiK1*Mchi$6*q2 - 4*kk1kk2*m2PsiK2*Mchi$6*q2 + 
+       4*kk1P*kk2p*m2PsiK1*Mchi$2*mmu$2*q2 + 4*kk1p*kk2P*m2PsiK1*Mchi$2*mmu$2*q2 - 12*kk1P*kk2P*m2PsiK1*Mchi$2*mmu$2*q2 + 4*kk1P*kk2p*m2PsiK2*Mchi$2*mmu$2*q2 + 
+       4*kk1p*kk2P*m2PsiK2*Mchi$2*mmu$2*q2 - 12*kk1P*kk2P*m2PsiK2*Mchi$2*mmu$2*q2 + 4*k2kk2*kk1p*Mchi$4*mmu$2*q2 - 2*k2kk2*kk1P*Mchi$4*mmu$2*q2 + 
+       4*k2kk1*kk2p*Mchi$4*mmu$2*q2 - 4*kk1P*kk2p*Mchi$4*mmu$2*q2 - 2*k2kk1*kk2P*Mchi$4*mmu$2*q2 - 4*kk1p*kk2P*Mchi$4*mmu$2*q2 + 16*kk1P*kk2P*Mchi$4*mmu$2*q2 - 
+       12*kk1kk2*m2PsiK1*Mchi$4*mmu$2*q2 - 12*kk1kk2*m2PsiK2*Mchi$4*mmu$2*q2 + 20*m2PsiK1*m2PsiK2*Mchi$4*mmu$2*q2 + 8*kk1kk2*Mchi$6*mmu$2*q2 - 
+       10*m2PsiK1*Mchi$6*mmu$2*q2 - 10*m2PsiK2*Mchi$6*mmu$2*q2 - 4*kk1P*kk2p*Mchi$2*mmu$4*q2 - 4*kk1p*kk2P*Mchi$2*mmu$4*q2 + 12*kk1P*kk2P*Mchi$2*mmu$4*q2 + 
+       12*kk1kk2*Mchi$4*mmu$4*q2 - 20*m2PsiK1*Mchi$4*mmu$4*q2 - 20*m2PsiK2*Mchi$4*mmu$4*q2 + 20*Mchi$6*mmu$4*q2 + 16*kk1P*kk2P*m2PsiK1*m2PsiK2*Mpsi$2*q2 + 
+       3*k2kk2*kk1P*m2PsiK1*Mchi$2*Mpsi$2*q2 + 2*kk1P*kk2p*m2PsiK1*Mchi$2*Mpsi$2*q2 + 3*k2kk1*kk2P*m2PsiK1*Mchi$2*Mpsi$2*q2 + 2*kk1p*kk2P*m2PsiK1*Mchi$2*Mpsi$2*q2 - 
+       28*kk1P*kk2P*m2PsiK1*Mchi$2*Mpsi$2*q2 + 3*k2kk2*kk1P*m2PsiK2*Mchi$2*Mpsi$2*q2 + 2*kk1P*kk2p*m2PsiK2*Mchi$2*Mpsi$2*q2 + 3*k2kk1*kk2P*m2PsiK2*Mchi$2*Mpsi$2*q2 + 
+       2*kk1p*kk2P*m2PsiK2*Mchi$2*Mpsi$2*q2 - 28*kk1P*kk2P*m2PsiK2*Mchi$2*Mpsi$2*q2 + 8*kk1kk2*m2PsiK1*m2PsiK2*Mchi$2*Mpsi$2*q2 + 4*k2kk1*k2kk2*Mchi$4*Mpsi$2*q2 + 
+       4*k2kk2*kk1p*Mchi$4*Mpsi$2*q2 - 6*k2kk2*kk1P*Mchi$4*Mpsi$2*q2 + 4*k2kk1*kk2p*Mchi$4*Mpsi$2*q2 - 4*kk1P*kk2p*Mchi$4*Mpsi$2*q2 - 6*k2kk1*kk2P*Mchi$4*Mpsi$2*q2 - 
+       4*kk1p*kk2P*Mchi$4*Mpsi$2*q2 + 32*kk1P*kk2P*Mchi$4*Mpsi$2*q2 - 20*kk1kk2*m2PsiK1*Mchi$4*Mpsi$2*q2 - 20*kk1kk2*m2PsiK2*Mchi$4*Mpsi$2*q2 + 
+       16*kk1kk2*Mchi$6*Mpsi$2*q2 - 32*kk1P*kk2P*m2PsiK1*mmu$2*Mpsi$2*q2 - 32*kk1P*kk2P*m2PsiK2*mmu$2*Mpsi$2*q2 - 6*k2kk2*kk1P*Mchi$2*mmu$2*Mpsi$2*q2 - 
+       4*kk1P*kk2p*Mchi$2*mmu$2*Mpsi$2*q2 - 6*k2kk1*kk2P*Mchi$2*mmu$2*Mpsi$2*q2 - 4*kk1p*kk2P*Mchi$2*mmu$2*Mpsi$2*q2 + 56*kk1P*kk2P*Mchi$2*mmu$2*Mpsi$2*q2 - 
+       16*kk1kk2*m2PsiK1*Mchi$2*mmu$2*Mpsi$2*q2 - 16*kk1kk2*m2PsiK2*Mchi$2*mmu$2*Mpsi$2*q2 + 20*m2PsiK1*m2PsiK2*Mchi$2*mmu$2*Mpsi$2*q2 + 
+       40*kk1kk2*Mchi$4*mmu$2*Mpsi$2*q2 - 40*m2PsiK1*Mchi$4*mmu$2*Mpsi$2*q2 - 40*m2PsiK2*Mchi$4*mmu$2*Mpsi$2*q2 + 40*Mchi$6*mmu$2*Mpsi$2*q2 + 
+       32*kk1P*kk2P*mmu$4*Mpsi$2*q2 + 16*kk1kk2*Mchi$2*mmu$4*Mpsi$2*q2 - 40*m2PsiK1*Mchi$2*mmu$4*Mpsi$2*q2 - 40*m2PsiK2*Mchi$2*mmu$4*Mpsi$2*q2 + 
+       80*Mchi$4*mmu$4*Mpsi$2*q2 - 8*kk1P*kk2P*m2PsiK1*Mpsi$4*q2 - 8*kk1P*kk2P*m2PsiK2*Mpsi$4*q2 - 2*k2kk2*kk1P*Mchi$2*Mpsi$4*q2 - 2*k2kk1*kk2P*Mchi$2*Mpsi$4*q2 + 
+       12*kk1P*kk2P*Mchi$2*Mpsi$4*q2 - 4*kk1kk2*m2PsiK1*Mchi$2*Mpsi$4*q2 - 4*kk1kk2*m2PsiK2*Mchi$2*Mpsi$4*q2 + 12*kk1kk2*Mchi$4*Mpsi$4*q2 + 
+       16*kk1P*kk2P*mmu$2*Mpsi$4*q2 + 8*kk1kk2*Mchi$2*mmu$2*Mpsi$4*q2 - 10*m2PsiK1*Mchi$2*mmu$2*Mpsi$4*q2 - 10*m2PsiK2*Mchi$2*mmu$2*Mpsi$4*q2 + 
+       20*Mchi$4*mmu$2*Mpsi$4*q2 + 20*Mchi$2*mmu$4*Mpsi$4*q2 + 8*kk1P*kk2P*m2PsiK2*Mchi$2*pow(m2PsiK1,2) + 4*k2kk1*k2kk2*Mchi$4*pow(m2PsiK1,2) - 
+       2*k2kk2*kk1P*Mchi$4*pow(m2PsiK1,2) - 2*k2kk1*kk2P*Mchi$4*pow(m2PsiK1,2) + 4*kk1P*kk2P*Mchi$4*pow(m2PsiK1,2) + 4*kk1kk2*m2PsiK2*Mchi$4*pow(m2PsiK1,2) + 
+       2*kk1kk2*Mchi$6*pow(m2PsiK1,2) + 16*kk1P*kk2P*m2PsiK2*mmu$2*pow(m2PsiK1,2) - 6*k2kk2*kk1P*Mchi$2*mmu$2*pow(m2PsiK1,2) - 
+       6*k2kk1*kk2P*Mchi$2*mmu$2*pow(m2PsiK1,2) + 4*kk1P*kk2P*Mchi$2*mmu$2*pow(m2PsiK1,2) + 8*kk1kk2*m2PsiK2*Mchi$2*mmu$2*pow(m2PsiK1,2) + 
+       10*m2PsiK2*Mchi$4*mmu$2*pow(m2PsiK1,2) + 5*Mchi$6*mmu$2*pow(m2PsiK1,2) + 16*kk1P*kk2P*mmu$4*pow(m2PsiK1,2) + 8*kk1kk2*Mchi$2*mmu$4*pow(m2PsiK1,2) + 
+       20*m2PsiK2*Mchi$2*mmu$4*pow(m2PsiK1,2) + 8*kk1P*kk2P*m2PsiK2*Mpsi$2*pow(m2PsiK1,2) - 4*k2kk2*kk1P*Mchi$2*Mpsi$2*pow(m2PsiK1,2) - 
+       4*k2kk1*kk2P*Mchi$2*Mpsi$2*pow(m2PsiK1,2) + 8*kk1P*kk2P*Mchi$2*Mpsi$2*pow(m2PsiK1,2) + 4*kk1kk2*m2PsiK2*Mchi$2*Mpsi$2*pow(m2PsiK1,2) + 
+       4*kk1kk2*Mchi$4*Mpsi$2*pow(m2PsiK1,2) + 16*kk1P*kk2P*mmu$2*Mpsi$2*pow(m2PsiK1,2) + 8*kk1kk2*Mchi$2*mmu$2*Mpsi$2*pow(m2PsiK1,2) + 
+       10*m2PsiK2*Mchi$2*mmu$2*Mpsi$2*pow(m2PsiK1,2) + 10*Mchi$4*mmu$2*Mpsi$2*pow(m2PsiK1,2) + 20*Mchi$2*mmu$4*Mpsi$2*pow(m2PsiK1,2) + 
+       4*kk1P*kk2P*Mpsi$4*pow(m2PsiK1,2) + 2*kk1kk2*Mchi$2*Mpsi$4*pow(m2PsiK1,2) + 5*Mchi$2*mmu$2*Mpsi$4*pow(m2PsiK1,2) - kk1P*kk2p*Mchi$2*q2*pow(m2PsiK1,2) - 
+       kk1p*kk2P*Mchi$2*q2*pow(m2PsiK1,2) + kk1kk2*Mchi$4*q2*pow(m2PsiK1,2) + 8*kk1P*kk2P*Mpsi$2*q2*pow(m2PsiK1,2) + 4*kk1kk2*Mchi$2*Mpsi$2*q2*pow(m2PsiK1,2) + 
+       10*Mchi$2*mmu$2*Mpsi$2*q2*pow(m2PsiK1,2) + 2*k2kk2*kk1P*Mchi$2*pow(m2PsiK1,3) + 2*k2kk1*kk2P*Mchi$2*pow(m2PsiK1,3) - 8*kk1P*kk2P*Mchi$2*pow(m2PsiK1,3) - 
+       4*kk1kk2*Mchi$4*pow(m2PsiK1,3) - 16*kk1P*kk2P*mmu$2*pow(m2PsiK1,3) - 8*kk1kk2*Mchi$2*mmu$2*pow(m2PsiK1,3) - 10*Mchi$4*mmu$2*pow(m2PsiK1,3) - 
+       20*Mchi$2*mmu$4*pow(m2PsiK1,3) - 8*kk1P*kk2P*Mpsi$2*pow(m2PsiK1,3) - 4*kk1kk2*Mchi$2*Mpsi$2*pow(m2PsiK1,3) - 10*Mchi$2*mmu$2*Mpsi$2*pow(m2PsiK1,3) + 
+       4*kk1P*kk2P*pow(m2PsiK1,4) + 2*kk1kk2*Mchi$2*pow(m2PsiK1,4) + 5*Mchi$2*mmu$2*pow(m2PsiK1,4) - 2*k2kk2*kk1P*m2PsiK1*Mchi$2*pow(m2PsiK2,2) - 
+       2*k2kk1*kk2P*m2PsiK1*Mchi$2*pow(m2PsiK2,2) + 8*kk1P*kk2P*m2PsiK1*Mchi$2*pow(m2PsiK2,2) + 4*kk1P*kk2P*Mchi$4*pow(m2PsiK2,2) + 
+       4*kk1kk2*m2PsiK1*Mchi$4*pow(m2PsiK2,2) + 2*kk1kk2*Mchi$6*pow(m2PsiK2,2) + 16*kk1P*kk2P*m2PsiK1*mmu$2*pow(m2PsiK2,2) + 
+       2*k2kk2*kk1P*Mchi$2*mmu$2*pow(m2PsiK2,2) + 2*k2kk1*kk2P*Mchi$2*mmu$2*pow(m2PsiK2,2) + 4*kk1P*kk2P*Mchi$2*mmu$2*pow(m2PsiK2,2) + 
+       8*kk1kk2*m2PsiK1*Mchi$2*mmu$2*pow(m2PsiK2,2) + 10*m2PsiK1*Mchi$4*mmu$2*pow(m2PsiK2,2) + 5*Mchi$6*mmu$2*pow(m2PsiK2,2) + 16*kk1P*kk2P*mmu$4*pow(m2PsiK2,2) + 
+       8*kk1kk2*Mchi$2*mmu$4*pow(m2PsiK2,2) + 20*m2PsiK1*Mchi$2*mmu$4*pow(m2PsiK2,2) + 8*kk1P*kk2P*m2PsiK1*Mpsi$2*pow(m2PsiK2,2) + 
+       2*k2kk2*kk1P*Mchi$2*Mpsi$2*pow(m2PsiK2,2) + 2*k2kk1*kk2P*Mchi$2*Mpsi$2*pow(m2PsiK2,2) + 8*kk1P*kk2P*Mchi$2*Mpsi$2*pow(m2PsiK2,2) + 
+       4*kk1kk2*m2PsiK1*Mchi$2*Mpsi$2*pow(m2PsiK2,2) + 4*kk1kk2*Mchi$4*Mpsi$2*pow(m2PsiK2,2) + 16*kk1P*kk2P*mmu$2*Mpsi$2*pow(m2PsiK2,2) + 
+       8*kk1kk2*Mchi$2*mmu$2*Mpsi$2*pow(m2PsiK2,2) + 10*m2PsiK1*Mchi$2*mmu$2*Mpsi$2*pow(m2PsiK2,2) + 10*Mchi$4*mmu$2*Mpsi$2*pow(m2PsiK2,2) + 
+       20*Mchi$2*mmu$4*Mpsi$2*pow(m2PsiK2,2) + 4*kk1P*kk2P*Mpsi$4*pow(m2PsiK2,2) + 2*kk1kk2*Mchi$2*Mpsi$4*pow(m2PsiK2,2) + 5*Mchi$2*mmu$2*Mpsi$4*pow(m2PsiK2,2) - 
+       kk1P*kk2p*Mchi$2*q2*pow(m2PsiK2,2) - kk1p*kk2P*Mchi$2*q2*pow(m2PsiK2,2) + kk1kk2*Mchi$4*q2*pow(m2PsiK2,2) + 8*kk1P*kk2P*Mpsi$2*q2*pow(m2PsiK2,2) + 
+       4*kk1kk2*Mchi$2*Mpsi$2*q2*pow(m2PsiK2,2) + 10*Mchi$2*mmu$2*Mpsi$2*q2*pow(m2PsiK2,2) - 8*kk1P*kk2P*pow(m2PsiK1,2)*pow(m2PsiK2,2) - 
+       4*kk1kk2*Mchi$2*pow(m2PsiK1,2)*pow(m2PsiK2,2) - 10*Mchi$2*mmu$2*pow(m2PsiK1,2)*pow(m2PsiK2,2) - 8*kk1P*kk2P*Mchi$2*pow(m2PsiK2,3) - 
+       4*kk1kk2*Mchi$4*pow(m2PsiK2,3) - 16*kk1P*kk2P*mmu$2*pow(m2PsiK2,3) - 8*kk1kk2*Mchi$2*mmu$2*pow(m2PsiK2,3) - 10*Mchi$4*mmu$2*pow(m2PsiK2,3) - 
+       20*Mchi$2*mmu$4*pow(m2PsiK2,3) - 8*kk1P*kk2P*Mpsi$2*pow(m2PsiK2,3) - 4*kk1kk2*Mchi$2*Mpsi$2*pow(m2PsiK2,3) - 10*Mchi$2*mmu$2*Mpsi$2*pow(m2PsiK2,3) + 
+       4*kk1P*kk2P*pow(m2PsiK2,4) + 2*kk1kk2*Mchi$2*pow(m2PsiK2,4) + 5*Mchi$2*mmu$2*pow(m2PsiK2,4) - 48*kk1P*kk2P*Mchi$2*pow(mmu,6) - 
+       40*m2PsiK1*m2PsiK2*Mchi$2*pow(mmu,6) - 32*kk1kk2*Mchi$4*pow(mmu,6) + 80*m2PsiK1*Mchi$4*pow(mmu,6) + 80*m2PsiK2*Mchi$4*pow(mmu,6) - 
+       160*Mchi$4*Mpsi$2*pow(mmu,6) + 20*Mchi$4*q2*pow(mmu,6) + 40*Mchi$2*Mpsi$2*q2*pow(mmu,6) + 20*Mchi$2*pow(m2PsiK1,2)*pow(mmu,6) + 
+       20*Mchi$2*pow(m2PsiK2,2)*pow(mmu,6) - 80*Mchi$4*pow(mmu,8) + 
+       k1kk2*Mchi$2*(-2*kk1p*Mchi$2*(m2PsiK1 + m2PsiK2 - 2*(mmu$2 + Mpsi$2))*q2 + 
+          4*k2kk1*Mchi$2*(-mmu$4 - 2*mmu$2*Mpsi$2 + m2PsiK2*(mmu$2 + Mpsi$2) + m2PsiK1*(-m2PsiK2 + mmu$2 + Mpsi$2) - Mpsi$4 + Mpsi$2*q2) + 
+          kk1P*(-2*q2*(Mchi$2*(mmu$2 + 3*Mpsi$2) + Mpsi$4 + mmu$2*(3*Mpsi$2 - q2) - Mpsi$2*q2) + 2*(-m2PsiK2 + mmu$2 + Mpsi$2)*pow(m2PsiK1,2) - 
+             2*(Mchi$2 + 3*mmu$2 + 2*Mpsi$2)*pow(m2PsiK2,2) + 2*pow(m2PsiK2,3) + 
+             m2PsiK1*(-4*mmu$4 - 6*mmu$2*Mpsi$2 + 2*m2PsiK2*(Mchi$2 + 2*mmu$2 + Mpsi$2) - 2*Mpsi$4 + 3*Mpsi$2*q2 + Mchi$2*(-2*mmu$2 - 2*Mpsi$2 + q2) - pow(q2,2)) + 
+             m2PsiK2*(4*mmu$4 + 6*mmu$2*Mpsi$2 + 2*Mpsi$4 + 3*Mpsi$2*q2 + Mchi$2*(2*mmu$2 + 2*Mpsi$2 + q2) - pow(q2,2)))) - 8*kk1P*kk2P*m2PsiK1*m2PsiK2*pow(q2,2) - 
+       k2kk2*kk1P*m2PsiK1*Mchi$2*pow(q2,2) - k2kk1*kk2P*m2PsiK1*Mchi$2*pow(q2,2) + 8*kk1P*kk2P*m2PsiK1*Mchi$2*pow(q2,2) - k2kk2*kk1P*m2PsiK2*Mchi$2*pow(q2,2) - 
+       k2kk1*kk2P*m2PsiK2*Mchi$2*pow(q2,2) + 8*kk1P*kk2P*m2PsiK2*Mchi$2*pow(q2,2) - 4*kk1kk2*m2PsiK1*m2PsiK2*Mchi$2*pow(q2,2) + 4*kk1kk2*m2PsiK1*Mchi$4*pow(q2,2) + 
+       4*kk1kk2*m2PsiK2*Mchi$4*pow(q2,2) + 16*kk1P*kk2P*m2PsiK1*mmu$2*pow(q2,2) + 16*kk1P*kk2P*m2PsiK2*mmu$2*pow(q2,2) + 2*k2kk2*kk1P*Mchi$2*mmu$2*pow(q2,2) + 
+       2*k2kk1*kk2P*Mchi$2*mmu$2*pow(q2,2) - 16*kk1P*kk2P*Mchi$2*mmu$2*pow(q2,2) + 8*kk1kk2*m2PsiK1*Mchi$2*mmu$2*pow(q2,2) + 8*kk1kk2*m2PsiK2*Mchi$2*mmu$2*pow(q2,2) - 
+       10*m2PsiK1*m2PsiK2*Mchi$2*mmu$2*pow(q2,2) - 8*kk1kk2*Mchi$4*mmu$2*pow(q2,2) + 10*m2PsiK1*Mchi$4*mmu$2*pow(q2,2) + 10*m2PsiK2*Mchi$4*mmu$2*pow(q2,2) - 
+       16*kk1P*kk2P*mmu$4*pow(q2,2) - 8*kk1kk2*Mchi$2*mmu$4*pow(q2,2) + 20*m2PsiK1*Mchi$2*mmu$4*pow(q2,2) + 20*m2PsiK2*Mchi$2*mmu$4*pow(q2,2) - 
+       20*Mchi$4*mmu$4*pow(q2,2) + 8*kk1P*kk2P*m2PsiK1*Mpsi$2*pow(q2,2) + 8*kk1P*kk2P*m2PsiK2*Mpsi$2*pow(q2,2) + 2*k2kk2*kk1P*Mchi$2*Mpsi$2*pow(q2,2) + 
+       2*k2kk1*kk2P*Mchi$2*Mpsi$2*pow(q2,2) - 28*kk1P*kk2P*Mchi$2*Mpsi$2*pow(q2,2) + 4*kk1kk2*m2PsiK1*Mchi$2*Mpsi$2*pow(q2,2) + 
+       4*kk1kk2*m2PsiK2*Mchi$2*Mpsi$2*pow(q2,2) - 16*kk1kk2*Mchi$4*Mpsi$2*pow(q2,2) - 16*kk1P*kk2P*mmu$2*Mpsi$2*pow(q2,2) - 8*kk1kk2*Mchi$2*mmu$2*Mpsi$2*pow(q2,2) + 
+       10*m2PsiK1*Mchi$2*mmu$2*Mpsi$2*pow(q2,2) + 10*m2PsiK2*Mchi$2*mmu$2*Mpsi$2*pow(q2,2) - 40*Mchi$4*mmu$2*Mpsi$2*pow(q2,2) - 20*Mchi$2*mmu$4*Mpsi$2*pow(q2,2) - 
+       4*kk1P*kk2P*pow(m2PsiK1,2)*pow(q2,2) - 2*kk1kk2*Mchi$2*pow(m2PsiK1,2)*pow(q2,2) - 5*Mchi$2*mmu$2*pow(m2PsiK1,2)*pow(q2,2) - 
+       4*kk1P*kk2P*pow(m2PsiK2,2)*pow(q2,2) - 2*kk1kk2*Mchi$2*pow(m2PsiK2,2)*pow(q2,2) - 5*Mchi$2*mmu$2*pow(m2PsiK2,2)*pow(q2,2) - 20*Mchi$2*pow(mmu,6)*pow(q2,2) + 
+       k1kk1*Mchi$2*(2*kk2P*m2PsiK1*m2PsiK2*Mchi$2 + 4*kk2P*m2PsiK1*m2PsiK2*mmu$2 - 2*kk2P*m2PsiK1*Mchi$2*mmu$2 + 2*kk2P*m2PsiK2*Mchi$2*mmu$2 - 4*kk2P*m2PsiK1*mmu$4 + 
+          4*kk2P*m2PsiK2*mmu$4 + 2*kk2P*m2PsiK1*m2PsiK2*Mpsi$2 - 2*kk2P*m2PsiK1*Mchi$2*Mpsi$2 + 2*kk2P*m2PsiK2*Mchi$2*Mpsi$2 - 6*kk2P*m2PsiK1*mmu$2*Mpsi$2 + 
+          6*kk2P*m2PsiK2*mmu$2*Mpsi$2 - 2*kk2P*m2PsiK1*Mpsi$4 + 2*kk2P*m2PsiK2*Mpsi$4 - 2*kk2p*m2PsiK1*Mchi$2*q2 + kk2P*m2PsiK1*Mchi$2*q2 - 2*kk2p*m2PsiK2*Mchi$2*q2 + 
+          kk2P*m2PsiK2*Mchi$2*q2 + 4*kk2p*Mchi$2*mmu$2*q2 - 2*kk2P*Mchi$2*mmu$2*q2 + 3*kk2P*m2PsiK1*Mpsi$2*q2 + 3*kk2P*m2PsiK2*Mpsi$2*q2 + 4*kk2p*Mchi$2*Mpsi$2*q2 - 
+          6*kk2P*Mchi$2*Mpsi$2*q2 - 6*kk2P*mmu$2*Mpsi$2*q2 - 2*kk2P*Mpsi$4*q2 + 
+          4*k2kk2*Mchi$2*(-mmu$4 - 2*mmu$2*Mpsi$2 + m2PsiK2*(mmu$2 + Mpsi$2) + m2PsiK1*(-m2PsiK2 + mmu$2 + Mpsi$2) - Mpsi$4 + Mpsi$2*q2) - 
+          2*kk2P*m2PsiK2*pow(m2PsiK1,2) + 2*kk2P*mmu$2*pow(m2PsiK1,2) + 2*kk2P*Mpsi$2*pow(m2PsiK1,2) - 2*kk2P*Mchi$2*pow(m2PsiK2,2) - 6*kk2P*mmu$2*pow(m2PsiK2,2) - 
+          4*kk2P*Mpsi$2*pow(m2PsiK2,2) + 4*k1kk2*Mchi$2*(mmu$4 + 2*mmu$2*Mpsi$2 - 2*m2PsiK2*(mmu$2 + Mpsi$2) + Mpsi$4 + Mpsi$2*q2 + pow(m2PsiK2,2)) + 
+          2*kk2P*pow(m2PsiK2,3) - kk2P*m2PsiK1*pow(q2,2) - kk2P*m2PsiK2*pow(q2,2) + 2*kk2P*mmu$2*pow(q2,2) + 2*kk2P*Mpsi$2*pow(q2,2))))/3.;
+    matr2 *= g2$2;
+    matr2 /= (pow(sqrt(sp(p))-Mpsi,2)+gammaPsi$2);
+//    cout<<"Print["<<matr2<<"/($$matr2)];"<<endl;
+    return matr2;
+}
+
+// chi_c2 -> mu+ mu- mu+ mu- with symmetrization
+double matr2_2(double kk1[4], double kk2[4], double k1[4], double k2[4]) {
+    return matr2_2_mm(kk1,kk2,k1,k2)+matr2_2_mm(k1,kk2,kk1,k2)+
+            matr2_2_mm(kk1,k2,k1,kk2)+matr2_2_mm(k1,k2,kk1,kk2);
+}
