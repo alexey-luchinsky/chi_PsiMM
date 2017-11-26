@@ -140,7 +140,7 @@ void test_chiJ(int J, int nEv, int iDebug = 0) {
 
 void test_chiJ_psi(int J, int nEv, int iDebug = 0) {
     double theory[3] = {3.95316e-8, 3.77115e-7, 2.705e-7};
-    if (J < 0 || J > 0) {
+    if (J < 0 || J > 1) {
         cout << "Wrong spin J=" << J << endl;
         ::abort();
     };
@@ -153,7 +153,7 @@ void test_chiJ_psi(int J, int nEv, int iDebug = 0) {
     const int nOut = 3, nOutPsi = 2;
     double XM[nOut] = {Mpsi, mmu, mmu}, XMpsi[nOutPsi] = {mmu, mmu};
     double sum = 0;
-    double _Mchi = Mchi0;
+    double _Mchi = chi_masses[J];
     for (int iEv = 0; iEv < nEv; ++iEv) {
         if (iEv % (nEv / 10) == 0) {
             cout << "========= " << (int) (100. * iEv / nEv) << " % ==========" << endl;
@@ -167,6 +167,7 @@ void test_chiJ_psi(int J, int nEv, int iDebug = 0) {
 
         double matr2;
         if (J == 0) matr2 = matr2_0(kk1, kk2, k1, k2);
+        else if (J == 1) matr2 = matr2_1(kk1, kk2, k1, k2);
 
         double q2 = sum_mass2(k1, k2);
         double m2PsiK1 = sum_mass2(p, k1);
@@ -209,8 +210,8 @@ int main(void) {
     TFile file("matr2_chic.root", "RECREATE");
     int nEv = 1e6;
 
-    test_chiJ_psi(0, nEv, 10);
-    test_chiJ(0, nEv);
+    test_chiJ_psi(1, nEv, 10);
+    test_chiJ(1, nEv);
     //    test_chiGammaJ(0,nEv);
     //    test_chiGammaJ(1,nEv);
     //    test_chiGammaJ(2,nEv);

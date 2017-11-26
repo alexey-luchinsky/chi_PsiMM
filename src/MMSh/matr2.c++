@@ -106,6 +106,48 @@ double matr2gamma_1(double pPsi[4], double k[4]) {
     return g1$2 * ((Mchi$2 + Mpsi$2) * pow(Mchi, -2) * pow(Mpsi, -2) * pow(Mchi$2 - Mpsi$2, 2)) / 2.;
 }
 
+// ======== chi_c1 -> psi mu mu -> mu(kk1) mu(kk2) mu(k1) mu(k2)
+double matr2_1_mm(double kk1[4], double kk2[4], double k1[4], double k2[4]) {
+    double Mchi=Mchi1, Mchi$2=pow(Mchi,2), Mchi$4=pow(Mchi,4);
+    double p[4], P[4]; sum(kk1,kk2,p); sum(p,k1,k2,P);
+    double m2PsiK1=sum_mass2(p,k1), m2PsiK2=sum_mass2(p,k2), q2=sum_mass2(k1,k2);
+    double k2kk1=sp(k2,kk1),  //
+            k2kk2=sp(k2,kk2), //
+            kk1kk2=sp(kk1,kk2), //
+            kk1p=sp(kk1,p), kk2p=sp(kk2,p), k1kk2=sp(k1,kk2),
+            k1kk1=sp(k1,kk1),
+            kk1P=sp(kk1,P), kk2P=sp(kk2,P);
+    
+
+    double matr2=
+16*alpha*PI*pow(Mchi,-2)*pow(q2,-2)*(-8*k2kk1*k2kk2*m2PsiK2*Mchi$2 + 4*k2kk1*k2kk2*Mchi$4 - 8*k2kk2*kk1P*m2PsiK1*mmu$2 - 8*k2kk1*kk2P*m2PsiK1*mmu$2 - 
+     8*k2kk1*k2kk2*m2PsiK2*mmu$2 - 8*k2kk2*kk1P*m2PsiK2*mmu$2 - 8*k2kk1*kk2P*m2PsiK2*mmu$2 - 4*kk1kk2*m2PsiK1*m2PsiK2*mmu$2 + 8*k2kk1*k2kk2*Mchi$2*mmu$2 + 
+     16*k2kk2*kk1P*Mchi$2*mmu$2 + 16*k2kk1*kk2P*Mchi$2*mmu$2 + 8*kk1kk2*m2PsiK1*Mchi$2*mmu$2 + 8*kk1kk2*m2PsiK2*Mchi$2*mmu$2 - 8*kk1kk2*Mchi$4*mmu$2 + 
+     4*k2kk1*k2kk2*mmu$4 + 16*k2kk2*kk1P*mmu$4 + 16*k2kk1*kk2P*mmu$4 + 8*kk1kk2*m2PsiK1*mmu$4 + 8*kk1kk2*m2PsiK2*mmu$4 + 4*m2PsiK1*m2PsiK2*mmu$4 - 
+     16*kk1kk2*Mchi$2*mmu$4 - 8*m2PsiK1*Mchi$2*mmu$4 - 8*m2PsiK2*Mchi$2*mmu$4 + 8*Mchi$4*mmu$4 - 2*k2kk2*kk1P*m2PsiK1*q2 - 2*k2kk1*kk2P*m2PsiK1*q2 + 
+     2*k2kk2*kk1P*m2PsiK2*q2 + 2*k2kk1*kk2P*m2PsiK2*q2 + 2*kk1kk2*m2PsiK1*m2PsiK2*q2 + 4*k2kk1*k2kk2*Mchi$2*q2 - 2*kk1kk2*m2PsiK1*Mchi$2*q2 - 
+     2*kk1kk2*m2PsiK2*Mchi$2*q2 + 2*kk1kk2*Mchi$4*q2 - 16*kk1P*kk2P*mmu$2*q2 - 2*kk1kk2*m2PsiK1*mmu$2*q2 - 2*kk1kk2*m2PsiK2*mmu$2*q2 + 12*kk1kk2*Mchi$2*mmu$2*q2 - 
+     2*m2PsiK1*Mchi$2*mmu$2*q2 - 2*m2PsiK2*Mchi$2*mmu$2*q2 + 2*Mchi$4*mmu$2*q2 + 2*kk1kk2*mmu$4*q2 - 2*m2PsiK1*mmu$4*q2 - 2*m2PsiK2*mmu$4*q2 + 12*Mchi$2*mmu$4*q2 - 
+     2*k1kk2*(2*k2kk1*(Mchi$4 + m2PsiK1*(m2PsiK2 - Mchi$2 - mmu$2) + 2*Mchi$2*mmu$2 - m2PsiK2*(Mchi$2 + mmu$2) + mmu$4 - Mchi$2*q2) + 
+        kk1P*(-8*mmu$2*(Mchi$2 + mmu$2) + m2PsiK1*(4*mmu$2 - q2) + m2PsiK2*(4*mmu$2 + q2))) - 2*kk1kk2*mmu$2*pow(m2PsiK1,2) + 2*mmu$4*pow(m2PsiK1,2) + 
+     mmu$2*q2*pow(m2PsiK1,2) + 2*k1kk1*(2*k2kk2*(-Mchi$4 - 2*Mchi$2*mmu$2 + m2PsiK2*(Mchi$2 + mmu$2) + m2PsiK1*(-m2PsiK2 + Mchi$2 + mmu$2) - mmu$4 + Mchi$2*q2) + 
+        kk2P*(8*mmu$2*(Mchi$2 + mmu$2) + m2PsiK1*(-4*mmu$2 + q2) - m2PsiK2*(4*mmu$2 + q2)) + 
+        2*k1kk2*(Mchi$4 - 2*m2PsiK1*(Mchi$2 + mmu$2) + mmu$4 + Mchi$2*(2*mmu$2 + q2) + pow(m2PsiK1,2))) + 4*k2kk1*k2kk2*pow(m2PsiK2,2) - 
+     2*kk1kk2*mmu$2*pow(m2PsiK2,2) + 2*mmu$4*pow(m2PsiK2,2) + mmu$2*q2*pow(m2PsiK2,2) - 8*kk1kk2*pow(mmu,6) - 8*m2PsiK1*pow(mmu,6) - 8*m2PsiK2*pow(mmu,6) + 
+     16*Mchi$2*pow(mmu,6) + 2*q2*pow(mmu,6) + 8*pow(mmu,8) + 2*kk1kk2*Mchi$2*pow(q2,2) + 6*Mchi$2*mmu$2*pow(q2,2));
+    matr2 *= g1$2;
+    matr2 /= (pow(sqrt(sp(p))-Mpsi,2)+gammaPsi$2);
+//    cout<<"Print["<<matr2<<"/($$matr2)];"<<endl;
+    return matr2;
+}
+
+// chi_c0 -> mu+ mu- mu+ mu- with symmetrization
+double matr2_1(double kk1[4], double kk2[4], double k1[4], double k2[4]) {
+    return matr2_1_mm(kk1,kk2,k1,k2)+matr2_1_mm(k1,kk2,kk1,k2)+
+            matr2_1_mm(kk1,k2,k1,kk2)+matr2_1_mm(k1,k2,kk1,kk2);
+}
+
+
 // ======== chi_c2 -> psi mu mu =================
 
 double matr2_2(double pPsi[4], double k1[4], double k2[4]) {
