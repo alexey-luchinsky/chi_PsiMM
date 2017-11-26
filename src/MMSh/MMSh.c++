@@ -139,6 +139,7 @@ void test_chiJ(int J, int nEv, int iDebug = 0) {
 }
 
 void test_chiJ_psi(int J, int nEv, int iDebug = 0) {
+    cout << "*********************** chi_c" << J << "psi ***********************" << endl;
     double theory[3] = {3.95316e-8, 3.77115e-7, 2.705e-7};
     if (J < 0 || J > 2) {
         cout << "Wrong spin J=" << J << endl;
@@ -211,8 +212,10 @@ int main(void) {
     TFile file("matr2_chic.root", "RECREATE");
     int nEv = 1e6;
 
-    test_chiJ_psi(2, nEv, 10);
-    test_chiJ(2, nEv);
+    for (int J = 0; J <= 2; ++J) {
+        test_chiJ_psi(J, nEv);
+        test_chiJ(J, nEv);
+    };
     //    test_chiGammaJ(0,nEv);
     //    test_chiGammaJ(1,nEv);
     //    test_chiGammaJ(2,nEv);
