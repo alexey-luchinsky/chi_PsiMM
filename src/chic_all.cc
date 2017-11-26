@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
         k2 = parent->getDaug(2)->getP4Lab();
         setLorentzVector(_k2, k2);
         EvtVector4R k = k1 + k2;
-        if (psi->getNDaug() == 3) {
+        if (psi->getNDaug() == 2) {
             kk1 = psi->getDaug(0)->getP4Lab();
             setLorentzVector(_kk1, kk1);
             kk2 = psi->getDaug(1)->getP4Lab();
