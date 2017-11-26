@@ -34,17 +34,51 @@ double matr2gamma_0(double pPsi[4], double k[4]) {
 
 // ======== chi_c0 -> psi mu mu -> mu(kk1) mu(kk2) mu(k1) mu(k2)
 double matr2_0_mm(double kk1[4], double kk2[4], double k1[4], double k2[4]) {
-    double q2 = sum_mass2(k1, k2);
-    double pPsi[4];
-    sum(k1,k2,pPsi);
-    double m2PsiK1 = sum_mass2(pPsi, k1), m2PsiK2=sum_mass2(pPsi,k2);
-    double k1kk1=sp(k1,kk2), k1kk2=sp(k1,kk2), k2kk1=sp(k2,kk1), k2kk2=sp(k2,kk2);
-    double const Mchi = Mchi0;
-    double const Mchi$2 = pow(Mchi, 2);
-    double matr2 = 64 * alpha * Mchi$2 * PI * (2 * k1kk2 * k2kk1 + 2 * k1kk1 * k2kk2 +
-            mmu$2 * (Mpsi$2 + q2)) * pow(m2PsiK1, 2) * pow(m2PsiK1 + m2PsiK2 - 2 * (mmu$2 + Mpsi$2), -2) * pow(q2, -2);
+    double Mchi=Mchi0, Mchi$2=pow(Mchi,2);
+    double p[4]; sum(kk1,kk2,p);
+    double m2PsiK1=sum_mass2(p,k1), m2PsiK2=sum_mass2(p,k2), q2=sum_mass2(k1,k2);
+    double k2kk1=sp(k2,kk1),  //
+            k2kk2=sp(k2,kk2), //
+            kk1kk2=sp(kk1,kk2), //
+            kk1p=sp(kk1,p), kk2p=sp(kk2,p), k1kk2=sp(k1,kk2),
+            k1kk1=sp(k1,kk1);
+//    cout<<"(*======================*)"<<endl;
+//    println_v4("kk1",kk1);
+//    println_v4("kk2",kk2);
+//    println_v4("p",p);
+//    println_v4("k1",k1);
+//    println_v4("k2",k2);
+//    cout<<"Print["<<m2PsiK1<<"/(sp[p+k1])];"<<endl;
+//    cout<<"Print["<<m2PsiK2<<"/(sp[p+k2])];"<<endl;
+//    cout<<"Print["<<q2<<"/(sp[k1+k2])];"<<endl;
+//    cout<<"Print["<<k2kk1<<"/(sp[k2,kk1])];"<<endl;
+//    cout<<"Print["<<k2kk2<<"/(sp[k2,kk2])];"<<endl;
+//    cout<<"Print["<<kk1kk2<<"/(sp[kk1,kk2])];"<<endl;
+//    cout<<"Print["<<kk1p<<"/(sp[kk1,p])];"<<endl;
+//    cout<<"Print["<<kk2p<<"/(sp[kk2,p])];"<<endl;
+//    cout<<"Print["<<k1kk2<<"/(sp[k1,kk2])];"<<endl;
+//    cout<<"Print["<<k1kk1<<"/(sp[k1,kk1])];"<<endl;
+
+
+    double matr2=
+64*alpha*Mchi$2*PI*pow(m2PsiK1 + m2PsiK2 - 2*(mmu$2 + Mpsi$2),-2)*pow(q2,-2)*
+   (8*k2kk1*k2kk2*m2PsiK1*mmu$2 + 4*kk1kk2*m2PsiK1*m2PsiK2*mmu$2 - 4*k2kk1*k2kk2*mmu$4 - 8*kk1kk2*m2PsiK1*mmu$4 - 8*kk1kk2*m2PsiK2*mmu$4 + 4*m2PsiK1*m2PsiK2*mmu$4 + 
+     8*k2kk1*k2kk2*m2PsiK1*Mpsi$2 - 8*k2kk1*k2kk2*mmu$2*Mpsi$2 - 8*kk1kk2*m2PsiK1*mmu$2*Mpsi$2 - 8*kk1kk2*m2PsiK2*mmu$2*Mpsi$2 + 16*kk1kk2*mmu$4*Mpsi$2 - 
+     8*m2PsiK1*mmu$4*Mpsi$2 - 8*m2PsiK2*mmu$4*Mpsi$2 - 4*k2kk1*k2kk2*Mpsi$4 + 8*kk1kk2*mmu$2*Mpsi$4 + 8*mmu$4*Mpsi$4 + 2*k2kk2*kk1p*m2PsiK1*q2 + 
+     2*k2kk1*kk2p*m2PsiK1*q2 + 2*k2kk2*kk1p*m2PsiK2*q2 + 2*k2kk1*kk2p*m2PsiK2*q2 - 2*kk1kk2*m2PsiK1*m2PsiK2*q2 - 4*k2kk2*kk1p*mmu$2*q2 - 4*k2kk1*kk2p*mmu$2*q2 + 
+     2*kk1kk2*m2PsiK1*mmu$2*q2 + 2*kk1kk2*m2PsiK2*mmu$2*q2 - 2*kk1kk2*mmu$4*q2 - 2*m2PsiK1*mmu$4*q2 - 2*m2PsiK2*mmu$4*q2 - 4*k2kk1*k2kk2*Mpsi$2*q2 - 
+     4*k2kk2*kk1p*Mpsi$2*q2 - 4*k2kk1*kk2p*Mpsi$2*q2 + 2*kk1kk2*m2PsiK1*Mpsi$2*q2 + 2*kk1kk2*m2PsiK2*Mpsi$2*q2 - 4*kk1kk2*mmu$2*Mpsi$2*q2 - 
+     2*m2PsiK1*mmu$2*Mpsi$2*q2 - 2*m2PsiK2*mmu$2*Mpsi$2*q2 + 4*mmu$4*Mpsi$2*q2 - 2*kk1kk2*Mpsi$4*q2 + 2*mmu$2*Mpsi$4*q2 + 
+     2*k1kk2*(kk1p*(m2PsiK1 + m2PsiK2 - 2*(mmu$2 + Mpsi$2))*q2 + 2*k2kk1*
+         (mmu$4 + m2PsiK1*(m2PsiK2 - mmu$2 - Mpsi$2) + 2*mmu$2*Mpsi$2 - m2PsiK2*(mmu$2 + Mpsi$2) + Mpsi$4 - Mpsi$2*q2)) - 4*k2kk1*k2kk2*pow(m2PsiK1,2) + 
+     2*kk1kk2*mmu$2*pow(m2PsiK1,2) + 2*mmu$4*pow(m2PsiK1,2) + mmu$2*q2*pow(m2PsiK1,2) + 2*kk1kk2*mmu$2*pow(m2PsiK2,2) + 2*mmu$4*pow(m2PsiK2,2) + 
+     mmu$2*q2*pow(m2PsiK2,2) - 2*k1kk1*(-(kk2p*(m2PsiK1 + m2PsiK2 - 2*(mmu$2 + Mpsi$2))*q2) + 
+        2*k2kk2*(-mmu$4 - 2*mmu$2*Mpsi$2 + m2PsiK2*(mmu$2 + Mpsi$2) + m2PsiK1*(-m2PsiK2 + mmu$2 + Mpsi$2) - Mpsi$4 + Mpsi$2*q2) + 
+        2*k1kk2*(mmu$4 + 2*mmu$2*Mpsi$2 - 2*m2PsiK2*(mmu$2 + Mpsi$2) + Mpsi$4 + Mpsi$2*q2 + pow(m2PsiK2,2))) + 8*kk1kk2*pow(mmu,6) - 8*m2PsiK1*pow(mmu,6) - 
+     8*m2PsiK2*pow(mmu,6) + 16*Mpsi$2*pow(mmu,6) + 2*q2*pow(mmu,6) + 8*pow(mmu,8) + 2*kk1kk2*Mpsi$2*pow(q2,2) + 2*mmu$2*Mpsi$2*pow(q2,2));
     matr2 *= g0$2;
-    matr2 /= pow(sqrt(q2)-Mpsi,2)+gammaPsi$2;
+    matr2 /= (pow(sqrt(sp(p))-Mpsi,2)+gammaPsi$2);
+//    cout<<"Print["<<matr2<<"/($$matr2)];"<<endl;
     return matr2;
 }
 

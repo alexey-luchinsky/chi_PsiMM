@@ -39,11 +39,11 @@ void write_histogram_to_file(TH1F &histogram, string file_name) {
     file.close();
 }
 
-void write_tuple_to_file(TNtuple *tup, string var, string file_name, int nBins=30) {
-    double _min=tup->GetMinimum(var.c_str()), _max=tup->GetMaximum(var.c_str());
-    TH1F *h=new TH1F("h","h",nBins, _min, _max);
-    tup->Project("h",var.c_str(),"matr2*wt");
-    write_histogram_to_file(*h,file_name);
+void write_tuple_to_file(TNtuple *tup, string var, string file_name, int nBins = 30) {
+    double _min = tup->GetMinimum(var.c_str()), _max = tup->GetMaximum(var.c_str());
+    TH1F *h = new TH1F("h", "h", nBins, _min, _max);
+    tup->Project("h", var.c_str(), "matr2*wt");
+    write_histogram_to_file(*h, file_name);
     h->Delete();
 }
 
@@ -134,24 +134,24 @@ void test_chiJ(int J, int nEv, int iDebug = 0) {
     cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
     cout << "gamma/th=" << gamma / th << endl;
     cout << "gamma/th_paper=" << gamma / th_paper << endl;
-    write_tuple_to_file(&tup,"q2","hQ2_chi"+strJ+"_matr2.hst");
-    write_tuple_to_file(&tup,"m2PsiK1","hm2PsiK1_chi"+strJ+"_matr2.hst");
+    write_tuple_to_file(&tup, "q2", "hQ2_chi" + strJ + "_matr2.hst");
+    write_tuple_to_file(&tup, "m2PsiK1", "hm2PsiK1_chi" + strJ + "_matr2.hst");
 }
 
-void test_chiJ_psi(int J, int nEv, int iDebug=0) {
+void test_chiJ_psi(int J, int nEv, int iDebug = 0) {
     double theory[3] = {3.95316e-8, 3.77115e-7, 2.705e-7};
-    if (J < 0 || J > 2) {
+    if (J < 0 || J > 0) {
         cout << "Wrong spin J=" << J << endl;
         ::abort();
     };
     string strJ = to_str(J);
-    const char* tupName=("chic"+strJ+"_psi").c_str();
+    const char* tupName = ("chic" + strJ + "_psi").c_str();
 
-    TNtuple tup(tupName,tupName, "q2:m2PsiK1:m2K1KK1:matr2:wt:wtPsi");
+    TNtuple tup(tupName, tupName, "q2:m2PsiK1:m2K1KK1:matr2:wt:wtPsi");
 
     double p[4], k1[4], k2[4], kk1[4], kk2[4];
-    const int nOut = 3, nOutPsi=2;
-    double XM[nOut] = {Mpsi, mmu, mmu}, XMpsi[nOutPsi]={mmu,mmu};
+    const int nOut = 3, nOutPsi = 2;
+    double XM[nOut] = {Mpsi, mmu, mmu}, XMpsi[nOutPsi] = {mmu, mmu};
     double sum = 0;
     double _Mchi = Mchi0;
     for (int iEv = 0; iEv < nEv; ++iEv) {
@@ -160,35 +160,32 @@ void test_chiJ_psi(int J, int nEv, int iDebug=0) {
         };
         double wt = ram3_(_Mchi, XM, p, k1, k2);
         wt *= pow(TWO_PI, 4 - 3 * nOut);
-        double wtPsi=ram2_(Mpsi, XMpsi, kk1,kk2);
+        double wtPsi = ram2_(Mpsi, XMpsi, kk1, kk2);
         wtPsi *= pow(TWO_PI, 4 - 3 * nOutPsi);
-        apply_boost_to(p,kk1);
-        apply_boost_to(p,kk2);
-        
+        apply_boost_to(p, kk1);
+        apply_boost_to(p, kk2);
+
         double matr2;
-        if (J == 0) matr2 = matr2_0(kk1,kk2,k1,k2);
-        else if (J == 1) matr2 = matr2_1(p, k1, k2);
-        else if (J == 2) matr2 = matr2_2(p, k1, k2);
+        if (J == 0) matr2 = matr2_0(kk1, kk2, k1, k2);
 
         double q2 = sum_mass2(k1, k2);
         double m2PsiK1 = sum_mass2(p, k1);
-        double m2K1KK1 = sum_mass2(k1,kk1);
+        double m2K1KK1 = sum_mass2(k1, kk1);
         if (iEv < iDebug) {
             cout << "======== Debug print at iEv=" << iEv << endl;
             println_v4("p", p);
             println_v4("k1", k1);
             println_v4("k2", k2);
-            println_v4("kk1",kk1);
-            println_v4("kk2",kk2);
+            println_v4("kk1", kk1);
+            println_v4("kk2", kk2);
             cout << " q2=" << q2 << ";" << endl;
             cout << " m2PsiK1=" << m2PsiK1 << ";" << endl;
-            cout << " (* m(kk1,kk2)="<<sqrt(sum_mass2(kk1,kk2))<<"*)"<<endl;
-            cout << " m2K1KK1="<<m2K1KK1<<";"<<endl;
-            cout << " $$matr2=" << matr2 << ";" << endl;
+            cout << " (* m(kk1,kk2)=" << sqrt(sum_mass2(kk1, kk2)) << "*)" << endl;
+            cout << " m2K1KK1=" << m2K1KK1 << ";" << endl;
             cout << "Print[sp[q]/q2];" << endl;
             cout << "Print[sp[p + k1]/m2PsiK1];" << endl;
             cout << "Print[sp[k1+kk1]/m2K1KK1];" << endl;
-            cout << "Print[$$matr2/$matr2];" << endl;
+            cout << "Print[" << matr2 << "/($$matr2)];" << endl;
         };
         tup.Fill(q2, m2PsiK1, m2K1KK1, matr2, wt, wtPsi);
         sum += wt*matr2;
@@ -198,12 +195,12 @@ void test_chiJ_psi(int J, int nEv, int iDebug=0) {
     double gamma = sum / ((2 * J + 1)*2 * _Mchi) / nEv;
     double th = theory[J];
     double th_paper = chi_widths[J] * brs_gamma[J] * br_mm[J];
-//    cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
-//    cout << "gamma/th=" << gamma / th << endl;
-//    cout << "gamma/th_paper=" << gamma / th_paper << endl;
-    write_tuple_to_file(&tup,"q2","hQ2_chi"+strJ+"_matr2_psi.hst");
-    write_tuple_to_file(&tup,"m2PsiK1","hm2PsiK1_chi"+strJ+"_matr2_psi.hst");
-    write_tuple_to_file(&tup,"m2K1KK1","hm2K1KK1_chi"+strJ+"_matr2_psi.hst");
+    //    cout << "chi_c" << J << ": gamma=" << gamma << " vs theoretical " << th << endl;
+    //    cout << "gamma/th=" << gamma / th << endl;
+    //    cout << "gamma/th_paper=" << gamma / th_paper << endl;
+    write_tuple_to_file(&tup, "q2", "hQ2_chi" + strJ + "_matr2_psi.hst");
+    write_tuple_to_file(&tup, "m2PsiK1", "hm2PsiK1_chi" + strJ + "_matr2_psi.hst");
+    write_tuple_to_file(&tup, "m2K1KK1", "hm2K1KK1_chi" + strJ + "_matr2_psi.hst");
 
 }
 
@@ -212,8 +209,8 @@ int main(void) {
     TFile file("matr2_chic.root", "RECREATE");
     int nEv = 1e6;
 
-    test_chiJ_psi(0, nEv,10);
-    test_chiJ(0,nEv);
+    test_chiJ_psi(0, nEv, 10);
+    test_chiJ(0, nEv);
     //    test_chiGammaJ(0,nEv);
     //    test_chiGammaJ(1,nEv);
     //    test_chiGammaJ(2,nEv);
