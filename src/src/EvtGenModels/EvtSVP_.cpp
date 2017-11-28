@@ -37,7 +37,7 @@ EvtSVP_::~EvtSVP_() {}
 
 std::string EvtSVP_::getName()
 {
-  return "SVP";     
+  return "SVP_";     
 }
 
 EvtDecayBase* EvtSVP_::clone()

@@ -40,7 +40,7 @@ EvtTVP_::~EvtTVP_() { }
 
 std::string EvtTVP_::getName()
 {
-  return "TVP";     
+  return "TVP_";     
 }
 
 

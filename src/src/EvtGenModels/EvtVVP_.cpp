@@ -38,7 +38,7 @@ EvtVVP_::~EvtVVP_() {}
 
 std::string EvtVVP_::getName()
 {
-  return "VVP";
+  return "VVP_";
 }
 
 
