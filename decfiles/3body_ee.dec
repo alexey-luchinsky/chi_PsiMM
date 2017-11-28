@@ -1,0 +1,36 @@
+Define ff 1e3
+
+Decay chi_c0
+1 J/psi e+ e- SVP_ ff;
+Enddecay
+
+Decay chi_c1
+1 J/psi e+ e- VVP_ ff;
+Enddecay
+
+Decay chi_c2
+1 J/psi e+ e- TVP_ ff;
+Enddecay
+
+Decay J/psi
+1 e+ e- VLL;
+Enddecay
+
+Decay chi_b0
+1 Upsilon e+ e- SVP_ ff;
+Enddecay
+
+Decay chi_b1
+1 Upsilon e+ e- VVP_ ff;
+Enddecay
+
+Decay chi_b2
+1 Upsilon e+ e- TVP_ ff;
+Enddecay
+
+Decay Upsilon
+1 e+ e- VLL;
+Enddecay
+
+
+End
