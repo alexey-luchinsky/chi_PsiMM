@@ -8,50 +8,50 @@
 // Copyright Information: See EvtGen/COPYRIGHT
 //      Copyright (C) 1998      Caltech, UCSB
 //
-// Module: EvtGen/EvtSVP.hh
+// Module: EvtGen/EvtVVP_.hh
 //
-// Description:Implementation of the Melikhov semileptonic model
+// Description: Routine to implement radiative decay 
+//                   chi_c1 -> psi gamma
+//                   chi_c1 -> psi ell ell
+//
 //
 // Modification history:
 //
-//    DJL     April 20, 1998         Module created
-//
+//    DJL/RYD     August 11, 1998         Module created
+//	AVL	Oct 10, 2017: chi_c0 -> psi mu mu  mode created
+//  AVL Nov 9 2017:   models joined
+//  
 //------------------------------------------------------------------------
 
-#ifndef EvtVVP__HH
-#define EvtVVP__HH
-
-#include <fstream>
-#include <stdio.h>
-
+#ifndef EVTVVP_HH
+#define EVTVVP_HH
 
 #include "EvtGenBase/EvtDecayAmp.hh"
-#include "EvtGenBase/EvtSemiLeptonicFF.hh"
-#include "EvtGenBase/EvtSemiLeptonicAmp.hh"
+
+#include <string>
 
 class EvtParticle;
+class EvtDecayBase;
 
-class EvtVVP_:public  EvtDecayAmp  {
+class EvtVVP_: public EvtDecayAmp  {
 
 public:
 
   EvtVVP_() {}
   virtual ~EvtVVP_();
-
+  
   std::string getName();
   EvtDecayBase* clone();
 
-  void decay(EvtParticle *p);
-  void decay_2body(EvtParticle *p);
-  void decay_3body(EvtParticle *p);
+  void initProbMax();
   void init();
-
-  virtual void initProbMax();
-
+  void decay(EvtParticle *p); 
 
 private:
+  void decay_2body(EvtParticle *p);
+  void decay_3body(EvtParticle *p);
   double delta; // form factor parameter
+
 };
 
 #endif
-

@@ -8,135 +8,177 @@
 // Copyright Information: See EvtGen/COPYRIGHT
 //      Copyright (C) 1998      Caltech, UCSB
 //
-// Module: EvtSVP.cc
+// Module: EvtSVP_.cc
 //
-// Description: Routine to implement radiative decay chi_c0 -> psi gamma
-//
+// Description: Routine to implement radiative decay 
+//                   chi_c0 -> psi gamma
+//                   chi_c0 -> psi ell ell
 //
 // Modification history:
-//	AVL	Jul 6, 2012	mode created
+//	AVL	Jul 6, 2012:  chi_c0 -> gamma psi  mode created
+//	AVL	Oct 10, 2017: chi_c0 -> psi mu mu  mode created
+//      AVL     Nov 9 2017:   models joined
+//  
 //------------------------------------------------------------------------
 // 
 #include "EvtGenBase/EvtPatches.hh"
-#include <stdlib.h>
 #include "EvtGenBase/EvtParticle.hh"
-#include "EvtGenBase/EvtTensorParticle.hh"
-#include "EvtGenBase/EvtGenKine.hh"
 #include "EvtGenBase/EvtPDL.hh"
-#include "EvtGenBase/EvtReport.hh"
+#include "EvtGenBase/EvtSpinType.hh"
 #include "EvtGenBase/EvtVector4C.hh"
-#include "EvtGenBase/EvtTensor4C.hh"
+#include "EvtGenBase/EvtVector4R.hh"
 #include "EvtGenBase/EvtDiracSpinor.hh"
-
 
 #include "EvtGenModels/EvtSVP_.hh"
 
+#include <cmath>
 
-#include <string>
-#include <iostream>
+EvtSVP_::~EvtSVP_() {}
 
-using namespace std;
-
-EvtSVP_::~EvtSVP_() {
-
+std::string EvtSVP_::getName()
+{
+  return "SVP_";     
 }
 
-std::string EvtSVP_::getName() {
-    return "SVP_";
+EvtDecayBase* EvtSVP_::clone()
+{
+  return new EvtSVP_;
 }
 
-EvtDecayBase* EvtSVP_::clone() {
-    return new EvtSVP_;
+void EvtSVP_::decay_2body(EvtParticle* root) 
+{
+  root->initializePhaseSpace(getNDaug(), getDaugs());
+  // Photon is the first particle and psi is the second
+  // to ensure decay file backwards compatibility
+  EvtParticle* photon = root->getDaug(0);
+  EvtParticle* psi    = root->getDaug(1);
 
-}
+  EvtVector4R p = psi->getP4(),    // psi momentum
+              k = photon->getP4(); // Photon momentum
 
-void EvtSVP_::decay_2body(EvtParticle* root) {
-    root ->initializePhaseSpace(getNDaug(), getDaugs());
+  bool validAmp(true);
 
-    EvtVector4R p = root->getDaug(1)->getP4(), // J/psi momentum
-            k = root->getDaug(0)->getP4(); // Photon momentum
-    for (int iPsi = 0; iPsi < 3; iPsi++) {
-        for (int iGamma = 0; iGamma < 2; iGamma++) {
-            EvtVector4C epsPsi = root->getDaug(1)->epsParent(iPsi).conj();
-            EvtVector4C epsGamma = root->getDaug(0)->epsParentPhoton(iGamma).conj();
-            EvtComplex amp = (epsPsi * epsGamma) - (epsPsi * k)*(epsGamma * p) / (k * p);
-            vertex(iGamma, iPsi, amp);
-        };
-    };
-}
+  double kp = k*p;
+  if (fabs(kp) < 1e-10) {validAmp = false;}
 
-void EvtSVP_::decay_3body(EvtParticle* root) {
-    root ->initializePhaseSpace(getNDaug(), getDaugs());
-
-    EvtVector4R p = root->getDaug(0)->getP4(), // J/psi momentum
-            k1 = root->getDaug(1)->getP4(), // mu+ momentum
-            k2 = root->getDaug(2)->getP4(), // mu- momentum
-            k = k1 + k2; // photon momentum
-
-    double kSq = k*k;
-    if (kSq < 1e-10) {
-        return;
+  for (int iPsi = 0; iPsi < 3; iPsi++) {
+    EvtVector4C epsPsi = psi->epsParent(iPsi).conj();
+    for (int iGamma = 0; iGamma < 2; iGamma++) {
+      EvtVector4C epsGamma = photon->epsParentPhoton(iGamma).conj();
+      EvtComplex amp(0.0, 0.0);
+      if (validAmp) {
+	amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/kp;
+      }
+      vertex(iGamma, iPsi, amp);
     }
-    double kp = k*p;
-    if (fabs(kp) < 1e-10) {
-        return;
-    }
-
-    double dSq = delta*delta;
-    double dSqDenom = dSq - k.mass2();
-    if (fabs(dSqDenom) < 1e-10) {
-        return;
-    }
-
-    double factor = dSq / (dSqDenom * kSq);
-
-    for (int iPsi = 0; iPsi < 3; ++iPsi) {
-        EvtVector4C epsPsi = root->getDaug(0)->epsParent(iPsi).conj();
-        for (int iMplus = 0; iMplus < 2; ++iMplus) {
-            EvtDiracSpinor spMplus = root->getDaug(1)->spParent(iMplus);
-            for (int iMminus = 0; iMminus < 2; ++iMminus) {
-                EvtDiracSpinor spMminus = root->getDaug(2)->spParent(iMminus);
-                EvtVector4C epsGamma = EvtLeptonVCurrent(spMplus, spMminus);
-                EvtComplex amp = (epsPsi * epsGamma) - (epsPsi * k)*(epsGamma * p) / kp;
-                amp *= factor;
-                vertex(iPsi, iMplus, iMminus, amp);
-            };
-        };
-    };
+  }
 }
 
-void EvtSVP_::decay(EvtParticle *root) {
-    if (getNDaug() == 2) decay_2body(root);
-    else if (getNDaug() == 3) decay_3body(root);
+
+void EvtSVP_::decay_3body(EvtParticle* root) 
+{
+  root->initializePhaseSpace(getNDaug(), getDaugs());
+  EvtParticle* psi = root->getDaug(0);
+  EvtParticle* mup = root->getDaug(1);
+  EvtParticle* mum = root->getDaug(2);
+
+  EvtVector4R  p = psi->getP4(), // psi momentum
+              k1 = mup->getP4(), // mu+ momentum
+              k2 = mum->getP4(), // mu- momentum
+               k = k1 + k2;      // photon momentum
+
+  double kSq = k*k;
+
+  // The decay amplitude needs four-vector products. Make sure we have
+  // valid values for these, otherwise set the amplitude to zero.
+  // We need to set _amp2 (EvtDecayAmp) via the vertex() function call
+  // even when the amplitude is zero, otherwise the amplitude from the 
+  // previous accepted event will be used, potentially leading to biases
+
+  // Selection on k^2 to avoid inefficient generation for the electron modes
+  bool validAmp(true);
+  if (kSq < 1e-3) {validAmp = false;}
+
+  // Extra checks to make sure we are not dividing by zero
+  double kp = k*p;
+  if (fabs(kp) < 1e-10) {validAmp = false;}
+
+  double dSq = delta*delta;
+  double dSqDenom = dSq - kSq;
+  if (fabs(dSqDenom) < 1e-10) {validAmp = false;}
+
+  double factor(1.0);
+  if (validAmp) {factor = dSq/(dSqDenom*kSq);}
+
+  // Calculate the amplitude terms, looping over the psi and lepton states
+  for (int iPsi = 0; iPsi < 3; iPsi++) {
+    EvtVector4C epsPsi = psi->epsParent(iPsi).conj();
+
+    for (int iMplus = 0; iMplus < 2; iMplus++) {
+      EvtDiracSpinor spMplus = mup->spParent(iMplus);
+
+      for (int iMminus = 0; iMminus < 2; iMminus++) {
+        EvtDiracSpinor spMminus = mum->spParent(iMminus);
+        EvtVector4C epsGamma = EvtLeptonVCurrent(spMplus, spMminus);
+        EvtComplex amp(0.0, 0.0);
+	if (validAmp) {
+	  amp = (epsPsi*epsGamma) - (epsPsi*k)*(epsGamma*p)/kp;
+	}
+        amp *= factor;
+
+	// Set the amplitude matrix element using the vertex function
+        vertex(iPsi, iMplus, iMminus, amp);
+      }
+    }
+  }
 }
 
-void EvtSVP_::init() {
+
+void EvtSVP_::decay( EvtParticle *root )
+{
+  if (getNDaug() == 2) {
+    decay_2body(root);
+  } else if (getNDaug() == 3) {
+    decay_3body(root);
+  }
+}
+
+
+void EvtSVP_::init()
+{
+  checkSpinParent(EvtSpinType::SCALAR);
+
+  if (getNDaug() == 2) { // chi -> gamma psi radiative mode
+    checkNArg(0);
+    checkNDaug(2);
+    checkSpinDaughter(0, EvtSpinType::PHOTON);
+    checkSpinDaughter(1, EvtSpinType::VECTOR);
+
+  } else if (getNDaug() == 3) { // chi -> psi lepton lepton
     checkSpinParent(EvtSpinType::SCALAR);
-    if (getNDaug() == 2) { // old SVP
-        checkNArg(0);
-        checkNDaug(2);
-        checkSpinDaughter(0, EvtSpinType::PHOTON);
-        checkSpinDaughter(1, EvtSpinType::VECTOR);
-    } else if (getNDaug() == 3) { // chi -> psi mu mu
-        checkSpinParent(EvtSpinType::SCALAR);
-        checkSpinDaughter(0, EvtSpinType::VECTOR);
-        checkSpinDaughter(1, EvtSpinType::DIRAC);
-        checkSpinDaughter(2, EvtSpinType::DIRAC);
-        checkNArg(1);
-        delta = getArg(0);
+    checkSpinDaughter(0, EvtSpinType::VECTOR);
+    checkSpinDaughter(1, EvtSpinType::DIRAC);
+    checkSpinDaughter(2, EvtSpinType::DIRAC);
+    checkNArg(1);
+    delta = getArg(0);
+  }
+}
+
+void EvtSVP_::initProbMax() 
+{
+  if (getNDaug() == 2) {
+    setProbMax(2.2);
+
+  } else if (getNDaug() == 3) {
+    const EvtId daugId = getDaug(1);
+    
+    if (daugId == EvtPDL::getId("mu+") || daugId == EvtPDL::getId("mu-")) {
+      setProbMax(130.0);
+    } else if (daugId == EvtPDL::getId("e+") || daugId == EvtPDL::getId("e-")) {
+      setProbMax(4100.0);
     }
 
+  }
+
 }
 
-void EvtSVP_::initProbMax() {
-    if (getNDaug() == 2) 
-        setProbMax(2.2);
-    else if (getNDaug() == 3) {
-        if (getDaug(1).getId() == EvtPDL::getId("mu+").getId()) {
-            setProbMax(150); // tested on 1e6 events
-        }
-        if (getDaug(1).getId() == EvtPDL::getId("e+").getId()) {
-            setProbMax(8e3); // tested on 1e6 events
-        }
-    };
-}
